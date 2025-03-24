@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<style>
+        .heart-icon {
+            color: red;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .message-icon {
+            color: blue;
+            margin-right: 5px;
+        }
+        .statusButton{
+            display : block;
+        }
+        .container{
+        position : relative;
+        }
+        .addButton{
+        position : absolute;
+        right : 10px;
+        bottom : 50px;
+        }
+        .plus-image{
+        width : 50px;
+        height : 50px;
+        }
+        .button-group{
+        display : flex;
+        justify-content : space-around;
+        align-items : center;
+        width : 259px;
+        position : relative;
+        }
+        .button{
+        display : flex;
+        flex-direction : column;
+        align-items : center;
+        text-decoration : none;
+        color : black;
+        }
+        .button.active{
+         background-color : #E2E2E2;
+        }
+
+    </style>
+<body>
+<div class="container">
+  <h3 th:text="${myPlace}">회원님 동네</h3>
+
+  <table>
+    <tr th:each="sell : ${sells}">
+      <td th:onclick="|javascript:goToSellDetail('${sell.sellId}','${sell.memberId}')|">
+        <img th:if="${sell.productImages.size()>0}" th:src="${sell.productImages.get(0).getImageUrl()}" width="100" height="100" />
+        <img th:unless="${sell.productImages.size()>0}" th:src="|/image/noImage.jpg|" width="100" height="100" />
+      </td>
+      <td th:onclick="|javascript:goToSellDetail('${sell.sellId}','${sell.memberId}')|">
+        <h3 th:text="${sell.title}">제목</h3>
+        <span th:if="${sell.sellStatus.toString()} == '예약중'">예약중</span>
+
+        <p th:text="${sell.memberPlace}">장소</p>
+        <p th:text="|${sell.price}원|"> >가격</p>
+      </td>
+      <td th:onclick="|javascript:goToSellDetail('${sell.sellId}','${sell.memberId}')|">
+        <span class="heart-icon">&#x2661;</span>
+        <span th:if="${sell.sellLikeCnt > 0}" th:text="${sell.sellLikeCnt}"></span>
+        <span class="message-icon">&#x2709;</span>
+        <span th:if="${sell.chatRoomCnt > 0}"  th:text="${sell.chatRoomCnt}"></span>
+      </td>
+    </tr>
+  </table>
+
+  <div class="button-group">
+    <a th:href="@{/sells}" class="button active">
+      <i class="fa-solid fa-house"></i>
+      <span>홈</span>
+    </a>
+    <a th:href="@{/members/myPage}" class="button">
+      <img th:src="|/image/basicProfile.png|" alt="유저 이미지" width="30px" height="30px">
+      <span>나의 당근</span>
+    </a>
+    <a class="addButton" th:href="@{/sells/add}">
+      <img class="plus-image" th:src="|/image/plus.jpg|"/>
+    </a>
+  </div>
+</div>
+<script>
+        function goToSellDetail(sellId,memberId) {
+            // 판매글 상세 페이지 URL로 이동
+            window.location.href = `/sells/${sellId}` + `?sellerId=${memberId}`;
+        }
+    </script>
+</body>
+
+</html>
