@@ -10,5 +10,5 @@ public class SellListResponseDTO {
 
     private String location;
 
-    private List<SellListSummeryDTO> sellListSummeryDTOS;
+    private List<ListSummeryDTO> sellListSummeryDTOS;
 }
