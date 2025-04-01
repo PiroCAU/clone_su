@@ -32,6 +32,7 @@ public class Sell {
     @OneToMany(mappedBy = "productImage_id", cascade = CascadeType.REFRESH)
     private List<ProductImage> productImage;
 
-    @OneToOne(mappedBy = "sellLike_id")
+    @OneToOne
+    @JoinColumn(name = "sellLike_id")
     private SellLike sellLike;
 }

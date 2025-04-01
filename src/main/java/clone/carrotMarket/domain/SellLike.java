@@ -13,9 +13,11 @@ public class SellLike {
     @Column(name = "sellLike")
     private Long id;
 
-    @OneToOne(mappedBy = "member_id")
+    @OneToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "sell_id")
+    @OneToOne
+    @JoinColumn(name = "sell_id")
     private Sell sell;
 }
