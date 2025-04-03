@@ -1,18 +1,19 @@
 package clone.carrotMarket.apiPayload;
 
+import clone.carrotMarket.config.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+@Builder
 public class ApiResponse<T> {
 
     @Schema(description = "상태 코드", example = "200")
     private int status;
 
     @Schema(description = "에러 발생시 에러코드", example = "S500")
-    private int code;
+    private String code;
 
     @Schema(description = "응답 메세지")
     private String message;
@@ -33,7 +34,7 @@ public class ApiResponse<T> {
     //실패 시 응답코드 반환
     public static <T> ApiResponse<T> error(ErrorCode errorCode) {
         return ApiResponse.<T>builder()
-                .status(errorCode.getStatus)
+                .status(errorCode.getStatus())
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .data(null)
