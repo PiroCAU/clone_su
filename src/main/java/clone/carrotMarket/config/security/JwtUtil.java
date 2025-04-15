@@ -13,7 +13,7 @@ public class JwtUtil {
     private final String KEY = "as9@d!8s97ah#kD12**93A!!88Zpp!";
     private final long EXP_TIEM = 1000L * 60 * 60;
 
-    public String creatToken(String email) {
+    public String createToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
