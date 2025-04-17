@@ -30,13 +30,12 @@
       <input type="hidden" name="_method" value="patch"/>
       <input type="hidden" th:field="*{id}"/>
     <div class="editProfile">
-        <img th:if="${member.profileImage != null}" th:src="|/image/product/${member.profileImage}" th:onclick="|javascript:displayMenu()|" alt="유저 이미지" width="30px" height="30px">
+        <img th:if="${member.profileImage != null}" th:src="|/image/product/${member.profileImage}|" th:onclick="|javascript:displayMenu()|" alt="유저 이미지" width="30px" height="30px">
         <img th:if="${member.profileImage == null}" th:src="|/image/basicProfile.png|" th:onclick="|javascript:displayMenu()|" alt="유저 이미지" width="30px" height="30px">
         <div class="form-group">
             <label th:for="nickname">닉네임</label>
             <input type="text" th:field="*{nickname}" class="form-control"
-                   th:class="${#fields.hasErrors('nickname')}? 'form-control
-      fieldError' : 'form-control'">
+                   th:class="${#fields.hasErrors('nickname')}? 'form-control fieldError' : 'form-control'">
             <p class="field-error" th:if="${#fields.hasErrors('nickname')}"
                th:errors="*{nickname}">Incorrect nickname</p>
         </div>
@@ -47,7 +46,7 @@
                    class="form-control" >
                 <form  action="/members/edit" method="post">
                 </form>
-                <form th:action="|/members/deleteImage/${member.id}|" method="post">
+                <form th:action="@{/members/deleteImage}" method="post">
                     <input type="hidden" name="_method" value="patch"/>
                     <button type="submit">삭제</button>
                 </form>
