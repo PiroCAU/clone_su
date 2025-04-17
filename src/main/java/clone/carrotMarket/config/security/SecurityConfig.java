@@ -33,12 +33,11 @@ public class SecurityConfig {
                 .and()
                 .addFilter(new JwtAuthenticationFilter(manager, jwtUtil))       //인증 필터
                 .addFilter(new JwtAuthorizationFilter(manager, memberRepository, jwtUtil))      //인가 필터
-                .authorizeHttpRequests(
-                        auth -> auth
-                                .requestMatchers("/api/login").permitAll()
-                                .requestMatchers("/api/signup").permitAll()
-                                .anyRequest().authenticated()
-                )
+                .authorizeRequests()
+                .antMatchers("/api/login").permitAll()
+                .antMatchers("/api/signup").permitAll()
+                .anyRequest().authenticated()
+                .and()
                 .build();
     }
 

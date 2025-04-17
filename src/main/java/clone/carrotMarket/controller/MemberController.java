@@ -24,7 +24,7 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public String saveMember(@Vaild @ModelAttribute CreateMemberDTO createMemberDTO, BindingResult result) {
+    public String saveMember(@Valid @ModelAttribute CreateMemberDTO createMemberDTO, BindingResult result) {
 
     }
 }
