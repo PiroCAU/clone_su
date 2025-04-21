@@ -1,7 +1,9 @@
 package clone.carrotMarket.config.security;
 
+import antlr.Token;
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.repository.MemberRepository;
+import clone.carrotMarket.service.TokenBlacklistService;
 import net.bytebuddy.asm.MemberRemoval;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,11 +23,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository repository, JwtUtil jwtUtil) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository repository, JwtUtil jwtUtil, TokenBlacklistService tokenBlacklistService) {
         super(authenticationManager);
         this.memberRepository = repository;
         this.jwtUtil = jwtUtil;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -36,7 +40,16 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
+        //앞에 붙은 Bearer 제가
         String token = header.replace("Bearer ", "");
+
+        //블랙리스트에 있는 토큰인지 확인
+        if (tokenBlacklistService.isBlacklisted(token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token is blacklisted");
+            return;
+        }
+
         if (jwtUtil.validateToken(token)) {
             String email = jwtUtil.extractEmail(token);
             Member member = memberRepository.findByEmail(email).orElseThrow();
