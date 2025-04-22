@@ -14,7 +14,7 @@ public class TokenBlacklistService {
 
     //블랙리스트 저장
     public void blacklistToken(String token, long expiration) {
-        redisTemplate.opsForValue().set(token, "blacklisted", expiration, TimeUnit.MICROSECONDS);
+        redisTemplate.opsForValue().set(token, "blacklisted", expiration, TimeUnit.MILLISECONDS);
     }
 
     //블랙리스트에 포함되었는가
