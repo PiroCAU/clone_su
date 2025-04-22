@@ -31,7 +31,7 @@ public class SellDetailResponseDto {
 
     private boolean sellLikeBoolean; // 좋아요 여부
 
-    private List<ProductImage> productImages;
+    private List<ProductImageDTO> productImages;
 
     private List<OtherSellSimpleDTO> otherSells;
 

@@ -5,6 +5,7 @@ import clone.carrotMarket.domain.ProductImage;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.dto.sell.CreateSellDTO;
 import clone.carrotMarket.dto.sell.OtherSellSimpleDTO;
+import clone.carrotMarket.dto.sell.ProductImageDTO;
 import clone.carrotMarket.dto.sell.SellDetailResponseDto;
 import clone.carrotMarket.service.FileStorageService;
 import clone.carrotMarket.service.SellLikeService;
@@ -43,7 +44,7 @@ public class SellConverter {
                 .build();
     }
 
-    public static SellDetailResponseDto SellDetailResponseDto(Sell sell, List<OtherSellSimpleDTO> othersells, SellLikeService sellLikeService) {
+    public static SellDetailResponseDto sellToSellDetailResponseDto(Sell sell, List<OtherSellSimpleDTO> othersells, SellLikeService sellLikeService) {
         return SellDetailResponseDto.builder()
                 .sellId(sell.getId())
                 .title(sell.getTitle())
@@ -58,8 +59,23 @@ public class SellConverter {
                 .memberPlace(sell.getMember().getPlace())
                 .memberImage(sell.getMember().getProfile_img())
                 .sellLikeBoolean(sellLikeService.isLiked(sell.getMember(), sell))
-                .productImages(sell.getProductImage())
+                .productImages(productImgToProductImgDTO(sell.getProductImage())
                 .otherSells(othersells)
                 .build();
+    }
+
+    public static List<ProductImageDTO> productImgToProductImgDTO(List<ProductImage> images) {
+        ArrayList<ProductImageDTO> dtos = new ArrayList<>();
+
+        for (ProductImage image : images) {
+            ProductImageDTO productImageDTO = new ProductImageDTO(image.getImageUrl(), image.getImageRank());
+            dtos.add(productImageDTO);
+        }
+
+        return dtos;
+    }
+
+    public static List<OtherSellSimpleDTO> sellToOtherSellSimpleDTO(Sell sell) {
+
     }
 }

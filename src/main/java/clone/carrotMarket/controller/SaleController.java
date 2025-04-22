@@ -5,6 +5,7 @@ import clone.carrotMarket.converter.SellConverter;
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.dto.sell.CreateSellDTO;
+import clone.carrotMarket.dto.sell.SellDetailResponseDto;
 import clone.carrotMarket.dto.sell.SellListResponseDTO;
 import clone.carrotMarket.service.;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +56,6 @@ public class SaleController {
     @GetMapping("/detail/{sellId}")
     public String detailSell(@PathVariable Long sellId) {
         Sell sell = sellService.findById(sellId);
+        SellConverter.sellToSellDetailResponseDto(sell, )
     }
 }
