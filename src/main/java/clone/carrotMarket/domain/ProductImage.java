@@ -1,5 +1,6 @@
 package clone.carrotMarket.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -18,4 +19,10 @@ public class ProductImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Sell sell;
+
+    @Builder
+    public ProductImage(String imageUrl, int imageRank) {
+        this.imageRank = imageRank;
+        this.imageUrl = imageUrl;
+    }
 }

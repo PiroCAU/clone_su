@@ -11,6 +11,7 @@ import java.util.UUID;
 public class FileStorageService {
 
     private final String uploadProfileDir = "/resources/static/image/profile";
+    private final String uploadSellDir = "/resources/static/image/sell";
     private final String basicProfile = "resources/static/image/basicProfile.png";
 
     public String storeProfileImg(MultipartFile file) {
@@ -38,5 +39,20 @@ public class FileStorageService {
 
     public String getBasicProfile() {
         return basicProfile;
+    }
+
+    public String storeSellImg(MultipartFile file) {
+        try {
+            String originalFilename = file.getOriginalFilename();
+            String uuid = UUID.randomUUID().toString();
+            String fileName = uuid + originalFilename;
+
+            File resultFile = new File(uploadSellDir, fileName);
+            file.transferTo(resultFile);
+
+            return fileName;
+        } catch (IOException e) {
+            throw new RuntimeException("파일 저장 실패", e);
+        }
     }
 }
