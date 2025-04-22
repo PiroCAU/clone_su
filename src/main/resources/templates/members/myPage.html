@@ -57,7 +57,7 @@
 <div class="container">
   <h4>나의 당근</h4>
   <div class="profile-section">
-    <img th:if="${member.profileImage != null}" th:src="|/image/product/${member.profileImage}" alt="유저 이미지" width="30px" height="30px">
+    <img th:if="${member.profileImage != null}" th:src="|/image/product/${member.profileImage}|" alt="유저 이미지" width="30px" height="30px">
     <img th:if="${member.profileImage == null}" th:src="|/image/basicProfile.png|" alt="유저 이미지" width="30px" height="30px">
     <span class="nickname" th:text="${member.nickname}">닉네임</span>
   </div>
@@ -80,9 +80,35 @@
   </div>
   <div>
     <form th:action="@{/logout}" method="post">
-      <button class="logout" type="submit">
-        로그아웃
-      </button>
+      <form id="logoutForm" action="/logout" method="post">
+        <button type="submit" onclick="handleLogout(event, this)" data-redirect-url="/login">
+          로그아웃
+        </button>
+      </form>
+
+      <script>
+        function handleLogout(event, button) {
+          event.preventDefault(); // 기본 submit 막고 JS로 수동 처리
+
+          const token = localStorage.getItem("accessToken");
+          const redirectUrl = button.getAttribute("data-redirect-url") || "/";
+
+          // ✅ 서버에 로그아웃 요청 (블랙리스트 등록용)
+          fetch("/api/logout", {
+            method: "POST",
+            headers: {
+              "Authorization": "Bearer " + token,
+              "Content-Type": "application/json"
+            }
+          }).finally(() => {
+            // ✅ 클라이언트 토큰 제거
+            localStorage.removeItem("accessToken");
+
+            // ✅ 리다이렉트
+            window.location.href = redirectUrl;
+          });
+        }
+      </script>
     </form>
   </div>
   <div class="button-group">
