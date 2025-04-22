@@ -4,7 +4,6 @@ import clone.carrotMarket.dto.sell.CreateSellDTO;
 import clone.carrotMarket.dto.sell.SellListResponseDTO;
 import clone.carrotMarket.service.;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +15,11 @@ import java.util.List;
 @RequestMapping("/api/sells")
 public class SaleController {
 
-    private final SaleService saleService;
+    private final SellService sellService;
 
     @GetMapping("/list")
     public String getSalesPosts(Model model) {
-        List<SellListResponseDTO> sales = saleService.getAllSellList();
+        List<SellListResponseDTO> sales = sellService.getAllSellList();
         model.addAttribute("saleList", sales);
         return "";
     }
@@ -33,7 +32,7 @@ public class SaleController {
 
     @PostMapping
     public String createSalePost(@ModelAttribute CreateSellDTO dto) {
-        saleService.save(dto);
+        sellService.save(dto);
         return
     }
 

@@ -4,20 +4,30 @@ import clone.carrotMarket.domain.SellStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Getter @Setter
 public class SellDetailResponseDto {
 
-    private String uploader;
-
-    private String hopingLocation;
-
-    private SellStatus state;
+    private Long sellId;
 
     private String title;
-
+    private String category;
+    private Integer price;
     private String content;
+    private String place;
+    private LocalDateTime createdAt;
+    private int views;
+    private int sellLikeCnt;
 
-    private int price;
+    private String memberNickname;
+    private String memberPlace;
+    private String memberImage;
 
-    private boolean isLike;     //요청한 사람이 게시글에 조항요를 눌렀는지 여부
+    private boolean sellLikeBoolean; // 좋아요 여부
+
+    private List<ProductImageDTO> productImages;
+
+    private List<OtherSellSimpleDTO> otherSells;
 }
