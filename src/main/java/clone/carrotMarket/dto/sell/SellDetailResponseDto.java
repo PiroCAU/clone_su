@@ -28,6 +28,7 @@ public class SellDetailResponseDto {
     private String memberNickname;
     private String memberPlace;
     private String memberImage;
+    private Long memberId;
 
     private boolean sellLikeBoolean; // 좋아요 여부
 

@@ -15,7 +15,7 @@ import java.util.List;
 public class CreateSellDTO {
 
     @NotEmpty(message = "파일은 최소 하나 이상 업로드해야 합니다.")
-    private List<MultipartFile> files;
+    private List<MultipartFile> imageFiles;
 
     @NotBlank(message = "제목은 비어 있을 수 없습니다.")
     private String title;

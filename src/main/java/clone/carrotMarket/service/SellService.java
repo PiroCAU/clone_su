@@ -1,16 +1,17 @@
 package clone.carrotMarket.service;
 
 import clone.carrotMarket.converter.SellConverter;
+import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.Sell;
+import clone.carrotMarket.domain.SellStatus;
+import clone.carrotMarket.dto.sell.MySellResponseDTO;
 import clone.carrotMarket.dto.sell.SellDetailResponseDto;
-import clone.carrotMarket.repository.SellLikeRepository;
 import clone.carrotMarket.repository.SellRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class SellService {
 
     private final SellRepository sellRepository;
     private final SellLikeService sellLikeService;
+    private final ChatService chatService;
 
     public Sell save(Sell sell) {
         return sellRepository.save(sell);
@@ -39,6 +41,13 @@ public class SellService {
 
         SellDetailResponseDto sellDetailResponseDto = SellConverter.sellToSellDetailResponseDto(sell, top5ByMember, sellLikeService);
         return sellDetailResponseDto;
+    }
+
+    public List<MySellResponseDTO> findMySell(Member member, SellStatus status) {
+        List<Sell> sells = sellRepository.findAllByMemberAndSellStatusOrderByCreatedAtDesc(member, status);
+        List<MySellResponseDTO> dtos = SellConverter.sellToMySellResponseDTO(sells, member, chatService);
+
+        return dtos;
     }
 
 }
