@@ -44,7 +44,7 @@ public class SellConverter {
                 .build();
     }
 
-    public static SellDetailResponseDto sellToSellDetailResponseDto(Sell sell, List<OtherSellSimpleDTO> othersells, SellLikeService sellLikeService) {
+    public static SellDetailResponseDto sellToSellDetailResponseDto(Sell sell, List<Sell> othersells, SellLikeService sellLikeService) {
         return SellDetailResponseDto.builder()
                 .sellId(sell.getId())
                 .title(sell.getTitle())
@@ -59,8 +59,8 @@ public class SellConverter {
                 .memberPlace(sell.getMember().getPlace())
                 .memberImage(sell.getMember().getProfile_img())
                 .sellLikeBoolean(sellLikeService.isLiked(sell.getMember(), sell))
-                .productImages(productImgToProductImgDTO(sell.getProductImage())
-                .otherSells(othersells)
+                .productImages(productImgToProductImgDTO(sell.getProductImage()))
+                .otherSells(sellToOtherSellSimpleDTO(othersells))
                 .build();
     }
 
@@ -75,7 +75,20 @@ public class SellConverter {
         return dtos;
     }
 
-    public static List<OtherSellSimpleDTO> sellToOtherSellSimpleDTO(Sell sell) {
+    public static List<OtherSellSimpleDTO> sellToOtherSellSimpleDTO(List<Sell> sells) {
+        List<OtherSellSimpleDTO> result = new ArrayList<>();
 
+        for (Sell sell : sells) {
+            OtherSellSimpleDTO build = OtherSellSimpleDTO.builder()
+                    .memberId(sell.getMember().getId())
+                    .sellId(sell.getId())
+                    .title(sell.getTitle())
+                    .price(sell.getPrice())
+                    .productImages(productImgToProductImgDTO(sell.getProductImage()))
+                    .build();
+            result.add(build);
+        }
+
+        return result;
     }
 }

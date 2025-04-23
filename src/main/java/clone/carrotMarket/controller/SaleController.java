@@ -54,8 +54,12 @@ public class SaleController {
     }
 
     @GetMapping("/detail/{sellId}")
-    public String detailSell(@PathVariable Long sellId) {
+    public String detailSell(@PathVariable Long sellId, Model model) {
         Sell sell = sellService.findById(sellId);
-        SellConverter.sellToSellDetailResponseDto(sell, )
+
+        SellDetailResponseDto detail = sellService.findDetail(sell);
+        model.addAttribute(detail);
+        return "sells/sellDetail";
+
     }
 }
