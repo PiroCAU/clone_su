@@ -5,10 +5,7 @@ import clone.carrotMarket.converter.SellConverter;
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.domain.SellStatus;
-import clone.carrotMarket.dto.sell.CreateSellDTO;
-import clone.carrotMarket.dto.sell.MySellResponseDTO;
-import clone.carrotMarket.dto.sell.SellDetailResponseDto;
-import clone.carrotMarket.dto.sell.SellListResponseDTO;
+import clone.carrotMarket.dto.sell.*;
 import clone.carrotMarket.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -73,5 +70,59 @@ public class SaleController {
         model.addAttribute("sells", dtos);
 
         return "sells/mySells";
+    }
+
+    //판매글을 조회한다. 단, 자신이 작성한 글과 status가 FIN인 글 제외
+    @GetMapping
+    public String findSells(@LoginMember Member member,
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "10") int size,
+                            Model model) {
+        String place = member.getPlace();
+
+        List<SellDTO> sellDTOs = sellService.findOtherUserSells(member.getId(), member, page, size);
+
+        model.addAttribute("myPlace", place);
+        model.addAttribute("sells", sellDTOs);
+
+        return "sells/sellList";
+    }
+
+    //다른 사람이 작성한 글의 리스트를 반환한다.
+    @GetMapping("other/{sellId}")
+    public String findOtherSells(@PathVariable Long sellId,
+                                 @RequestParam Long memberId,
+                                 @RequestParam(required = false) SellStatus sellStatus,
+                                 Model model) {
+        List<SellDTO> sells = sellService.findOtherSells(sellId, memberId, sellStatus);
+        model.addAttribute("sells", sells);
+
+        return "sells/otherSells";
+    }
+
+
+    @GetMapping("/my/{sellId}")
+    public String mySellDetail(@PathVariable Long sellId, Model model) {
+        SellDetailDTO dto = sellService.findByIdDTO(sellId);
+        model.addAttribute("sell", dto);
+        return "sells/mySellDetail";
+    }
+
+    //sell 수정 폼
+    @GetMapping("/edit/{sellId}")
+    public String editSellForm(@PathVariable Long sellId,@LoginMember Member member, Model model) {
+        UpdateSellDto dto = sellService.editSellRequest(sellId, member);
+        model.addAttribute("sell", dto);
+        return "sells/editForm";
+    }
+
+    @PutMapping("/edit/{sellId}")
+    public String editSell(@ModelAttribute("sell") @Valid UpdateSellDto dto, BindingResult result,
+                           @LoginMember Member member, Model model) {
+        if (result.hasErrors()) {
+            return "sells/editForm";
+        }
+
+        sellService.editSell(dto, member);
     }
 }

@@ -1,5 +1,7 @@
 package clone.carrotMarket.dto.sell;
 
+import clone.carrotMarket.domain.Category;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Getter @Setter
+@Getter @Setter @Builder
 public class UpdateSellDto {
 
     @NotNull
@@ -18,7 +20,7 @@ public class UpdateSellDto {
     private String title;
 
     @NotBlank
-    private String category;
+    private Category category;
 
     @NotNull
     private Integer price;
@@ -36,4 +38,6 @@ public class UpdateSellDto {
     private Double longitude;
 
     private List<MultipartFile> imageFiles;
+
+    private List<ProductImageDTO> productImages;
 }

@@ -40,11 +40,14 @@ public class Sell {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @OneToMany(mappedBy = "productImage_id", cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy = "sell", cascade = CascadeType.REFRESH)
     private List<ProductImage> productImage;
 
     @OneToMany(mappedBy = "sell",cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<SellLike> sellLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sell",cascade = CascadeType.REMOVE,orphanRemoval = true)
+    private List<ChatRoom> chatRooms = new ArrayList<>();
 
 
     @Builder

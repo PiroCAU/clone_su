@@ -22,6 +22,7 @@ public class SellDetailResponseDto {
     private String content;
     private String place;
     private LocalDateTime createdAt;
+    private LocalDateTime updateAt;
     private int views;
     private long sellLikeCnt;
 

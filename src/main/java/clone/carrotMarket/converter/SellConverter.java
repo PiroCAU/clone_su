@@ -50,6 +50,7 @@ public class SellConverter {
                 .content(sell.getContent())
                 .place(sell.getPlace())
                 .createdAt(sell.getCreated_at())
+                .createdAt(sell.getUplodated_at())
                 .views(sell.getViews())
                 .sellLikeCnt(sellLikeService.countSellLike(sell))
                 .memberNickname(sell.getMember().getNickName())
@@ -90,7 +91,7 @@ public class SellConverter {
         return result;
     }
 
-    public static List<MySellResponseDTO> sellToMySellResponseDTO(List<Sell> sells, Member member, ChatService chatService) {
+    public static List<MySellResponseDTO> sellToMySellResponseDTO(List<Sell> sells, Member member, ChatService chatService, SellLikeService sellLikeService) {
         List<MySellResponseDTO> result = new ArrayList<>();
         for (Sell sell : sells) {
             MySellResponseDTO build = MySellResponseDTO.builder()
@@ -99,6 +100,7 @@ public class SellConverter {
                     .sellStatus(sell.getSellStatus())
                     .memberPlace(member.getPlace())
                     .price(sell.getPrice())
+                    .sellLikeCnt(sellLikeService.countSellLike(sell))
                     .chatRoomCnt(chatService.countByMemberAndSell(member, sell))
                     .productImages(productImgToProductImgDTO(sell.getProductImage()))
                     .build();
@@ -106,5 +108,38 @@ public class SellConverter {
         }
 
         return result;
+    }
+
+    public static List<SellDTO> sellToSellDTO(List<Sell> sells, Member member, SellLikeService sellLikeService, ChatService chatService) {
+        List<SellDTO> result = new ArrayList<>();
+        for (Sell sell : sells) {
+            SellDTO build = SellDTO.builder()
+                    .sellId(sell.getId())
+                    .title(sell.getTitle())
+                    .sellStatus(sell.getSellStatus())
+                    .memberPlace(member.getPlace())
+                    .price(sell.getPrice())
+                    .sellLikeCnt(sellLikeService.countSellLike(sell))
+                    .chatRoomCnt(chatService.countByMemberAndSell(member, sell))
+                    .productImages(productImgToProductImgDTO(sell.getProductImage()))
+                    .memberId(member.getId())
+                    .build();
+            result.add(build);
+        }
+
+        return result;
+    }
+
+    public static UpdateSellDto sellToUpdateSellDTO(Sell sell) {
+        UpdateSellDto build = UpdateSellDto.builder()
+                .sellId(sell.getId())
+                .title(sell.getTitle())
+                .content(sell.getContent())
+                .price(sell.getPrice())
+                .category(sell.getCategory())
+                .place(sell.getPlace())
+                .productImages(productImgToProductImgDTO(sell.getProductImage()))
+                .build();
+        return build;
     }
 }
