@@ -21,4 +21,6 @@ public interface SellRepository extends JpaRepository<Sell, Long> {
 
     List<Sell> findTop5BySellNotAndMemberAndSellStatus(Sell sell, Member member, SellStatus sellStatus);
     List<Sell> findTop5BySellNotAndMemberAndSellStatusNot(Sell sell, Member member, SellStatus sellStatus);
+
+    List<Sell> findAllByPlace(String place);
 }

@@ -37,6 +37,11 @@ public class SellService {
                 .orElseThrow(() -> new IllegalArgumentException("판매글이 존재하지 않습니다."));
     }
 
+//    public List<SellListResponseDTO> getAllSellList(Member member) {
+//        String place = member.getPlace();
+//        List<Sell> sells = sellRepository.findAllByPlace(place);
+//    }
+
     public SellDetailResponseDto findDetail(Sell sell) {
 
         List<Sell> top5ByMember = sellRepository.findTop5ByMember(sell.getMember());

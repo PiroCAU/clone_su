@@ -2,6 +2,7 @@ package clone.carrotMarket.controller;
 
 import clone.carrotMarket.config.security.LoginMember;
 import clone.carrotMarket.converter.SellConverter;
+import clone.carrotMarket.domain.Category;
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.domain.SellStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,13 +27,25 @@ public class SaleController {
     private final SellService sellService;
     private final FileStorageService storageService;
 
-    //TODO: 페이징 관련 정책 수정, 지역별 검색 관련 수정
-    @GetMapping("/list")
-    public String getSellPosts(Model model) {
+//    //TODO: 페이징 관련 정책 수정, 지역별 검색 관련 수정
+//    @GetMapping("/list")
+//    public String getSellPosts(Model model, @LoginMember Member member) {
+//
+//        List<SellListResponseDTO> sales = sellService.getAllSellList(member);
+//        model.addAttribute("saleList", sales);
+//        return "sells/sellList";
+//    }
 
-        List<SellListResponseDTO> sales = sellService.getAllSellList();
-        model.addAttribute("saleList", sales);
-        return "sells/sellList";
+    @ModelAttribute("category")
+    public List<Category> categories() {
+        ArrayList<Category> categories = new ArrayList<>();
+        categories.add(Category.Life);
+        categories.add(Category.Digital);
+        categories.add(Category.Interior);
+        categories.add(Category.Food);
+        categories.add(Category.Plant);
+        categories.add(Category.Other);
+        return categories;
     }
 
     //게시글 작성 요청
