@@ -118,6 +118,27 @@ public class SellService {
         sell.changeUpdatedAt();
     }
 
+    @Transactional
+    public void updateSellStatus(Long sellId, Member member, SellStatus status) {
+        Sell sell = findById(sellId);
+
+        if (!isEditableMember(sell, member)) {
+            throw new IllegalArgumentException("적합한 사용자가 아닙니다");
+        }
+
+        sell.changeSellStatus(status);
+    }
+
+    @Transactional
+    public void deleteSell(Long sellId, Member member) {
+        Sell sell = findById(sellId);
+        if (!isEditableMember(sell, member)) {
+            throw new IllegalArgumentException("적합한 사용자가 아닙니다");
+        }
+
+        sell.delete();
+    }
+
     //게시글 수정 명령이 들어오면 수정한 사람과 작성자를 비교해서 수정 가능한 지 확인한다.
     public boolean isEditableMember(Sell sell, Member member) {
         if (sell.getMember() == member) {

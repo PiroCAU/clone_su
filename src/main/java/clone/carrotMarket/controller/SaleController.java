@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -110,7 +111,7 @@ public class SaleController {
 
     //sell 수정 폼
     @GetMapping("/edit/{sellId}")
-    public String editSellForm(@PathVariable Long sellId,@LoginMember Member member, Model model) {
+    public String editSellForm(@PathVariable Long sellId, @LoginMember Member member, Model model) {
         UpdateSellDto dto = sellService.editSellRequest(sellId, member);
         model.addAttribute("sell", dto);
         return "sells/editForm";
@@ -125,6 +126,26 @@ public class SaleController {
 
         sellService.editSell(dto, member);
 
-        return "redirect:/" + dto.getSellId();
+        return "redirect:/sells/my/" + dto.getSellId();
+    }
+
+    @PatchMapping("/{sellId}/updateStstus")
+    public String updateSellStatus(@PathVariable Long sellId, @LoginMember Member member, @RequestParam SellStatus status, HttpServletRequest request) {
+        sellService.updateSellStatus(sellId, member, status);
+
+        //이 요청이 어디서 왔는지 확인하고 해당 위치로 보낸다.
+        String referer = request.getHeader("referer");
+        String[] split = referer.split("/");
+        String str = split[split.length - 1];
+        if (str.startsWith("my")) {
+            return "redirect:/sells/my";
+        }
+        return "redirect:/";
+    }
+
+    @DeleteMapping("{sellId}")
+    public String deleteSell(@PathVariable Long sellId, @LoginMember Member member) {
+        sellService.deleteSell(sellId, member);
+        return "redirect:/sells/my";
     }
 }
