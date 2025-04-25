@@ -5,8 +5,6 @@ public enum Category {
     Food("생활/가공식품"), Plant("식물"), Other("기타 중고물품");
     private final String value;
 
-
-
     Category(String value) {
         this.value = value;
     }

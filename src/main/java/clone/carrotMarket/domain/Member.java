@@ -33,7 +33,7 @@ public class Member {
     private LocalDateTime deleteAt;
 
     @OneToMany(mappedBy = "sellLike_id")
-    private List<SellLike> sellLike;
+    private List<SellLike> sellLikes;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.REMOVE)
     private List<Sell> sells = new ArrayList<>();
@@ -67,6 +67,5 @@ public class Member {
         this.name = name;
         this.phone_number = phone_number;
         this.profile_img = profile_img;
-
     }
 }
