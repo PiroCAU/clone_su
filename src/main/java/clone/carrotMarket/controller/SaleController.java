@@ -124,5 +124,7 @@ public class SaleController {
         }
 
         sellService.editSell(dto, member);
+
+        return "redirect:/" + dto.getSellId();
     }
 }

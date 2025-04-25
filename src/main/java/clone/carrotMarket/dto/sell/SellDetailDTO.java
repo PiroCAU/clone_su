@@ -2,11 +2,9 @@ package clone.carrotMarket.dto.sell;
 
 import clone.carrotMarket.converter.SellConverter;
 import clone.carrotMarket.domain.Category;
-import clone.carrotMarket.domain.ProductImage;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.domain.SellStatus;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,7 +51,7 @@ public class SellDetailDTO {
         sellStatus = sell.getSellStatus();
         views = sell.getViews();
         createdAt = sell.getCreated_at();
-        updatedAt = sell.getUplodated_at();
+        updatedAt = sell.getUpdatedAt();
         memberId = sell.getMember().getId();
         memberNickname = sell.getMember().getNickName();
         memberImage = sell.getMember().getProfile_img();

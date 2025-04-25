@@ -2,6 +2,7 @@ package clone.carrotMarket.service;
 
 import clone.carrotMarket.converter.SellConverter;
 import clone.carrotMarket.domain.Member;
+import clone.carrotMarket.domain.ProductImage;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.domain.SellStatus;
 import clone.carrotMarket.dto.sell.*;
@@ -24,7 +25,9 @@ public class SellService {
     private final SellLikeService sellLikeService;
     private final ChatService chatService;
     private final MemberRepository memberRepository;
+    private final FileStorageService storageService;
 
+    @Transactional
     public Sell save(Sell sell) {
         return sellRepository.save(sell);
     }
@@ -99,9 +102,23 @@ public class SellService {
             throw new IllegalArgumentException("적합한 사용자가 아닙니다");
         }
 
+        //사용자가 새로운 이미지를 넣었는지 확인하고 ProductImg로 변환하여 입력
+        if (dto.getImageFiles() != null) {
+            List<ProductImage> productImages = storageService.getProductImgs(dto.getImageFiles());
+            for (ProductImage productImage : productImages) {
+                productImage.setProductImg(sell);
+            }
+        }
 
+        sell.changeTitle(dto.getTitle());
+        sell.changeContent(dto.getContent());
+        sell.changePrice(dto.getPrice());
+        sell.changeCategory(dto.getCategory());
+        sell.changePlace(dto.getPlace());
+        sell.changeUpdatedAt();
     }
 
+    //게시글 수정 명령이 들어오면 수정한 사람과 작성자를 비교해서 수정 가능한 지 확인한다.
     public boolean isEditableMember(Sell sell, Member member) {
         if (sell.getMember() == member) {
             return true;

@@ -50,7 +50,7 @@ public class SellConverter {
                 .content(sell.getContent())
                 .place(sell.getPlace())
                 .createdAt(sell.getCreated_at())
-                .createdAt(sell.getUplodated_at())
+                .createdAt(sell.getUpdatedAt())
                 .views(sell.getViews())
                 .sellLikeCnt(sellLikeService.countSellLike(sell))
                 .memberNickname(sell.getMember().getNickName())
