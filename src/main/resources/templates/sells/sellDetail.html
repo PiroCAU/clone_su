@@ -186,7 +186,7 @@
         </div>
 
         <ul class="product-list">
-            <li class="product-item" th:each="otherSell : ${otherSells}" th:onclick="|javascript:goToSellDetail('${otherSell.sellId}','${otherSell.memberId}')|">
+            <li class="product-item" th:each="otherSell : ${sell.otherSells}" th:onclick="|javascript:goToSellDetail('${otherSell.sellId}','${otherSell.memberId}')|">
                 <img class="product-image" th:src="${otherSell.productImages.get(0).getImageUrl()}" width="100" height="100">
                 <span th:text="${otherSell.title}" class="product-title">상품 1</span>
                 <span th:text="|${otherSell.price}원|" class="product-price">가격: $10</span>
@@ -197,7 +197,7 @@
     <div class="footer">
         <div class="likeAndPrice">
             <form id="sellLikeForm" th:action="@{/sells/like/{sellId}(sellId=${sell.sellId},sellerId=${sell.memberId})}" method="post">
-                <span class="heart-icon" onclick="toggleHeart(this)" th:classappend="${sellLikeBoolean} ? filled">&#x2661;</span>
+                <span class="heart-icon" onclick="toggleHeart(this)" th:classappend="${sell.sellLikeBoolean} ? filled">&#x2661;</span>
             </form>
             <span th:text="|${sell.price}원|">상품 가격</span>
         </div>

@@ -12,6 +12,7 @@ public class MemberConverter {
         //비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
+        //기본 프로필을 할당하고 만약 사용자가 입력한 프로필이 있다면 해당 프로필 사진을 저장한다.
         String profile = storageService.getBasicProfile();
         MultipartFile profileImg = dto.getProfileImg();
         if (profileImg != null && !profileImg.isEmpty()) {
