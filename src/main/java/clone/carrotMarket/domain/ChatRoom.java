@@ -1,5 +1,6 @@
 package clone.carrotMarket.domain;
 
+import clone.carrotMarket.repository.ChatRepository;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -25,4 +26,6 @@ public class ChatRoom {
 
     @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.REMOVE)
     private List<ChatMessage> chatMessage = new ArrayList<>();
+
+    public ChatRoom(Sell sell, Member member);
 }

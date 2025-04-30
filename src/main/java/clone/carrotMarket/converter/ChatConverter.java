@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class ChatConverter {
 
-    public ChatRoomDTO chatRoomToDTO(ChatRoom room) {
+    public static ChatRoomDTO chatRoomToDTO(ChatRoom room) {
 
         Sell sell = room.getSell();
 
@@ -23,7 +23,7 @@ public class ChatConverter {
                 room.getChatMessage().stream()
                 .map(ChatMessageDTO::new).collect(Collectors.toList());
 
-        ChatRoomDTO.builder()
+        ChatRoomDTO build = ChatRoomDTO.builder()
                 .id(room.getId())
                 .sellerId(sell.getMember().getId())
                 .senderId(room.getSender().getId())
@@ -40,9 +40,11 @@ public class ChatConverter {
                 .senderNickname(room.getSender().getNickName())
                 .chatMessages(chatMessages)
                 .build();
+
+        return build;
     }
 
-    public ChatMessageDTO chatMessageToDTO(ChatMessage message) {
+    public static ChatMessageDTO chatMessageToDTO(ChatMessage message) {
         return new ChatMessageDTO(message);
     }
 }
