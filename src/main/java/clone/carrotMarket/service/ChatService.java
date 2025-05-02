@@ -4,6 +4,7 @@ import clone.carrotMarket.converter.ChatConverter;
 import clone.carrotMarket.domain.ChatRoom;
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.Sell;
+import clone.carrotMarket.dto.chat.ChatMessageDTO;
 import clone.carrotMarket.dto.chat.ChatRoomDTO;
 import clone.carrotMarket.repository.ChatRepository;
 import clone.carrotMarket.repository.MemberRepository;
@@ -74,5 +75,12 @@ public class ChatService {
 
         ChatRoomDTO chatRoomDTO = ChatConverter.chatRoomToDTO(room);
         return chatRoomDTO;
+    }
+
+    @Transactional
+    public void chatSave(ChatMessageDTO dto) {
+        try {
+
+        }
     }
 }

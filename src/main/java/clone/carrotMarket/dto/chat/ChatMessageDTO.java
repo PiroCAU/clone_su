@@ -2,6 +2,7 @@ package clone.carrotMarket.dto.chat;
 
 import clone.carrotMarket.domain.ChatMessage;
 
+@Getter
 public class ChatMessageDTO {
 
     private Long roomId;
