@@ -1,6 +1,6 @@
 package clone.carrotMarket.apiPayload;
 
-import clone.carrotMarket.config.exception.ErrorCode;
+import clone.carrotMarket.config.exception.status.ErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
