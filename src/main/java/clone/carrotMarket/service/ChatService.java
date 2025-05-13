@@ -1,11 +1,13 @@
 package clone.carrotMarket.service;
 
 import clone.carrotMarket.converter.ChatConverter;
+import clone.carrotMarket.domain.ChatMessage;
 import clone.carrotMarket.domain.ChatRoom;
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.dto.chat.ChatMessageDTO;
 import clone.carrotMarket.dto.chat.ChatRoomDTO;
+import clone.carrotMarket.repository.ChatMessageRepository;
 import clone.carrotMarket.repository.ChatRepository;
 import clone.carrotMarket.repository.MemberRepository;
 import clone.carrotMarket.repository.SellRepository;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class ChatService {
 
     private final ChatRepository chatRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final SellRepository sellRepository;
     private final MemberRepository memberRepository;
 
@@ -78,9 +81,16 @@ public class ChatService {
     }
 
     @Transactional
-    public void chatSave(ChatMessageDTO dto) {
+    public void saveChat(ChatMessageDTO dto) {
         try {
+            Optional<Member> byId = memberRepository.findById(dto.getSenderId());
+            Member member = byId.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 맴버입니다."));
+            ChatRoom chatRoom = chatRepository.findById(dto.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채팅방입니다."));
 
+            ChatMessage chatMessage = new ChatMessage(dto.getMessage(), member, chatRoom);
+            chatMessageRepository.save(chatMessage);
+        } catch (Exception e){
+            throw new RuntimeException("잘못된 요청입니다.");
         }
     }
 }

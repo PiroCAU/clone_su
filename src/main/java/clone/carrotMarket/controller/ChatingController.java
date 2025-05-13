@@ -17,6 +17,6 @@ public class ChatingController {
     @MessageMapping(value = "/chat/message")
     public void message(ChatMessageDTO message) {
         chatService.saveChat(message);
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(). message);
+        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 }

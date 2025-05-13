@@ -1,6 +1,7 @@
 package clone.carrotMarket.dto.chat;
 
 import clone.carrotMarket.domain.ChatMessage;
+import lombok.Getter;
 
 @Getter
 public class ChatMessageDTO {

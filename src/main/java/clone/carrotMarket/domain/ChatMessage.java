@@ -3,6 +3,7 @@ package clone.carrotMarket.domain;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -15,7 +16,7 @@ public class ChatMessage {
     private Long id;
 
     private String message;
-    private LocalTime sendTime;
+    private LocalDateTime sendTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
@@ -24,4 +25,11 @@ public class ChatMessage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chatRoom_id")
     private ChatRoom chatRoom;
+
+    public ChatMessage(String message, Member sender, ChatRoom chatRoom) {
+        this.message = message;
+        this.sender = sender;
+        this.chatRoom = chatRoom;
+        this.sendTime = LocalDateTime.now();
+    }
 }
