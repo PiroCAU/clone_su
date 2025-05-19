@@ -1,10 +1,8 @@
 package clone.carrotMarket.config.exception;
 
-import clone.carrotMarket.apiPayload.ApiResponse;
-import lombok.AllArgsConstructor;
+import clone.carrotMarket.config.exception.dto.ErrorReasonDTO;
+import clone.carrotMarket.config.exception.status.ErrorCode;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Getter
 public class GeneralException extends RuntimeException {

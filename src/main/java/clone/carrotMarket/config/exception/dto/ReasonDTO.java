@@ -1,11 +1,11 @@
-package clone.carrotMarket.config.exception;
+package clone.carrotMarket.config.exception.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter @Builder
-public class ErrorReasonDTO {
+public class ReasonDTO {
 
     private HttpStatus httpStatus;
 
@@ -13,5 +13,5 @@ public class ErrorReasonDTO {
     private final String code;
     private final String message;
 
-    public boolean getIsSussess() {return isSuccess;}
+    public boolean getIsSuccess(){return isSuccess;}
 }

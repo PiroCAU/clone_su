@@ -1,16 +1,17 @@
 package clone.carrotMarket.apiPayload;
 
-import clone.carrotMarket.config.exception.ErrorCode;
+import clone.carrotMarket.config.exception.status.ErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @Builder
 public class ApiResponse<T> {
 
     @Schema(description = "상태 코드", example = "200")
-    private int status;
+    private HttpStatus status;
 
     @Schema(description = "에러 발생시 에러코드", example = "S500")
     private String code;
@@ -24,7 +25,7 @@ public class ApiResponse<T> {
     //성공 시 응답코드 반환
     public static <T> ApiResponse<T> success(String message, T data) {
         return ApiResponse.<T>builder()
-                .status(200)
+                .status(HttpStatus.OK)
                 .code(null)
                 .message(message)
                 .data(data)
@@ -34,7 +35,7 @@ public class ApiResponse<T> {
     //실패 시 응답코드 반환
     public static <T> ApiResponse<T> error(ErrorCode errorCode) {
         return ApiResponse.<T>builder()
-                .status(errorCode.getStatus())
+                .status(errorCode.getHttpStatus())
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .data(null)
@@ -44,7 +45,7 @@ public class ApiResponse<T> {
     // 에러 응답 생성 메서드(커스텀 메세지 추가)
     public static <T> ApiResponse<T> error(String message ,ErrorCode errorCode, T data) {
         return ApiResponse.<T>builder()
-                .status(errorCode.getStatus())
+                .status(errorCode.getHttpStatus())
                 .code(errorCode.getCode())
                 .message(message)
                 .data(data)
