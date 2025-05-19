@@ -1,4 +1,4 @@
-package clone.carrotMarket.config.exception;
+package clone.carrotMarket.config.exception.dto;
 
 import lombok.Builder;
 import lombok.Getter;

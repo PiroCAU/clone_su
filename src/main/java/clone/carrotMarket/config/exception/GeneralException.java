@@ -1,5 +1,6 @@
 package clone.carrotMarket.config.exception;
 
+import clone.carrotMarket.config.exception.dto.ErrorReasonDTO;
 import clone.carrotMarket.config.exception.status.ErrorCode;
 import lombok.Getter;
 

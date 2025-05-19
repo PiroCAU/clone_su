@@ -1,7 +1,7 @@
 package clone.carrotMarket.config.exception.status;
 
 import clone.carrotMarket.config.exception.BaseErrorCode;
-import clone.carrotMarket.config.exception.ErrorReasonDTO;
+import clone.carrotMarket.config.exception.dto.ErrorReasonDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
