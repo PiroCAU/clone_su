@@ -37,5 +37,4 @@ public class SellDetailResponseDto {
 
     private List<OtherSellSimpleDTO> otherSells;
 
-    private SellDetailResponseDto() {}
 }

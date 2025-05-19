@@ -24,7 +24,7 @@ public class ProductImage {
     private Sell sell;
 
     @Builder
-    public ProductImage(String imageUrl, int imageRank) {
+    public ProductImage(String imageUrl, Integer imageRank) {
         this.imageRank = imageRank;
         this.imageUrl = imageUrl;
     }

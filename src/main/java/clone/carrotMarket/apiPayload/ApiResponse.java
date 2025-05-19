@@ -34,7 +34,7 @@ public class ApiResponse<T> {
     //실패 시 응답코드 반환
     public static <T> ApiResponse<T> error(ErrorCode errorCode) {
         return ApiResponse.<T>builder()
-                .status(errorCode.getStatus())
+                .status(errorCode.getHttpStatus())
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .data(null)

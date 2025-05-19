@@ -72,9 +72,7 @@ public class ChatService {
         Member writer = room.getSell().getMember();
 
         //해당 채팅방에 들어갈 수 있는 인물인지 확인한다.
-        if (!member.getId().equals(sender.getId()) && !member.getId().equals(writer.getId())) {
-            throw new RuntimeException("e");
-        }
+        isInRoom(member, room);
 
         ChatRoomDTO chatRoomDTO = ChatConverter.chatRoomToDTO(room);
         return chatRoomDTO;
@@ -87,10 +85,20 @@ public class ChatService {
             Member member = byId.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 맴버입니다."));
             ChatRoom chatRoom = chatRepository.findById(dto.getRoomId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채팅방입니다."));
 
+            isInRoom(member, chatRoom);
+
             ChatMessage chatMessage = new ChatMessage(dto.getMessage(), member, chatRoom);
             chatMessageRepository.save(chatMessage);
         } catch (Exception e){
             throw new RuntimeException("잘못된 요청입니다.");
         }
     }
+
+
+    private static void isInRoom(Member member, ChatRoom room) {
+        if (!member.getId().equals(room.getSender().getId()) && !member.getId().equals(room.getSell().getMember().getId())) {
+            throw new RuntimeException("e");
+        }
+    }
+
 }

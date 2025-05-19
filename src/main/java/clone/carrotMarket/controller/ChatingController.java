@@ -18,5 +18,6 @@ public class ChatingController {
     public void message(ChatMessageDTO message) {
         chatService.saveChat(message);
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        // 메세지를 특정 채팅방에 있는 사람에게 전송
     }
 }
