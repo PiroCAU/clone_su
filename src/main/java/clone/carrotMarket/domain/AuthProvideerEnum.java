@@ -1,5 +1,5 @@
 package clone.carrotMarket.domain;
 
-public enum AuthProvideer {
+public enum AuthProvideerEnum {
     GOOGLE, APPLE
 }

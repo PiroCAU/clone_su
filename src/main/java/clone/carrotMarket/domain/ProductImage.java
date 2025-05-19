@@ -29,6 +29,11 @@ public class ProductImage {
         this.imageUrl = imageUrl;
     }
 
+
+    protected ProductImage() {
+    }
+
+
     public void setProductImg(Sell sell) {
         this.sell = sell;
         if (!sell.getProductImage().contains(this)) {

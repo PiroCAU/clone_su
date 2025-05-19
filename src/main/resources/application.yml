@@ -13,7 +13,6 @@ spring:
     cache : false
   config:
     import :
-
       - localDB.yml
       - jwt.yml
   redis:
@@ -35,6 +34,7 @@ spring:
     hiddenmethod:
       filter:
         enabled : true
+
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace

@@ -2,6 +2,7 @@ package clone.carrotMarket.domain;
 
 import clone.carrotMarket.repository.ChatRepository;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class ChatRoom {
 
     @Id
@@ -20,11 +22,11 @@ public class ChatRoom {
     @JoinColumn(name = "sell_id")
     private Sell sell;
 
-    @ManyToOne(fetch = FetchType.LAZY )
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
     private Member sender;
 
-    @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<ChatMessage> chatMessage = new ArrayList<>();
 
     public ChatRoom(Sell sell, Member member) {
