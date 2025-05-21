@@ -32,7 +32,7 @@ public class Member {
     private boolean isDeleted = false;  //soft delete
     private LocalDateTime deleteAt;
 
-    @OneToMany(mappedBy = "sellLike_id")
+    @OneToMany(mappedBy = "member")
     private List<SellLike> sellLikes;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.REMOVE)

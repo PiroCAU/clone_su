@@ -15,12 +15,12 @@ public interface SellRepository extends JpaRepository<Sell, Long> {
 
     List<Sell> findTop5ByMember(Member member);
 
-    List<Sell> findAllByMemberAndSellStatusOrderByCreated_atDesc(Member member, SellStatus sellStatus);
+    List<Sell> findAllByMemberAndSellStatusOrderByCreatedAtDesc(Member member, SellStatus sellStatus);
 
     Page<Sell> findByMemberIdNotAndSellStatusNot(Long memberId, SellStatus status, Pageable pageable);
 
-    List<Sell> findTop5BySellNotAndMemberAndSellStatus(Sell sell, Member member, SellStatus sellStatus);
-    List<Sell> findTop5BySellNotAndMemberAndSellStatusNot(Sell sell, Member member, SellStatus sellStatus);
+    List<Sell> findTop5ByIdNotAndMemberAndSellStatus(Long id, Member member, SellStatus sellStatus);
+    List<Sell> findTop5ByIdIsNotAndMemberAndSellStatusIsNot(Long id, Member member, SellStatus sellStatus);
 
     List<Sell> findAllByPlace(String place);
 }

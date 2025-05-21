@@ -21,7 +21,7 @@ public class Sell {
     @EqualsAndHashCode.Include
     private Long id;
     private String content;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     private int price;
     private String title;
     private int latitude;
@@ -50,6 +50,9 @@ public class Sell {
     @OneToMany(mappedBy = "sell",cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<ChatRoom> chatRooms = new ArrayList<>();
 
+    @OneToOne(mappedBy = "sell")
+    private Purchase purchase;
+
 
     @Builder
     public Sell(String title, String content, Category category, Integer price, String place, List<ProductImage> files, Member member) {
@@ -58,7 +61,7 @@ public class Sell {
         this.category = category;
         this.price = price;
         this.place = place;
-        this.created_at = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
         this.sellStatus = SellStatus.SELLING;
 
         for (ProductImage file : files) {
@@ -86,6 +89,7 @@ public class Sell {
     public void changeCategory(Category category) { this.category = category; }
     public void changePlace(String place) { this.place = place;}
     public void changeUpdatedAt() {this.updatedAt = LocalDateTime.now();}
+    public void changePurchase(Purchase purchase) {this.purchase = purchase;}
 
     public void setMember(Member member) {
         this.member = member;

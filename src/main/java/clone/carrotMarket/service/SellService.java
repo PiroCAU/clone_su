@@ -55,7 +55,7 @@ public class SellService {
     }
 
     public List<MySellResponseDTO> findMySell(Member member, SellStatus status) {
-        List<Sell> sells = sellRepository.findAllByMemberAndSellStatusOrderByCreated_atDesc(member, status);
+        List<Sell> sells = sellRepository.findAllByMemberAndSellStatusOrderByCreatedAtDesc(member, status);
         List<MySellResponseDTO> dtos = SellConverter.sellToMySellResponseDTO(sells, member, chatService, sellLikeService);
 
         return dtos;
@@ -74,9 +74,9 @@ public class SellService {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
         List<Sell> sells = null;
         if (sellStatus == null || sellStatus != SellStatus.FIN) {
-            sells = sellRepository.findTop5BySellNotAndMemberAndSellStatusNot(sell, member, SellStatus.FIN);
+            sells = sellRepository.findTop5ByIdIsNotAndMemberAndSellStatusIsNot(sellId, member, SellStatus.FIN);
         } else if (sellStatus == SellStatus.SELLING || sellStatus == SellStatus.BOOKING) {
-            sells = sellRepository.findTop5BySellNotAndMemberAndSellStatus(sell, member, sellStatus);
+            sells = sellRepository.findTop5ByIdNotAndMemberAndSellStatus(sellId, member, sellStatus);
         }
 
         List<SellDTO> sellDTOS = SellConverter.sellToSellDTO(sells, member, sellLikeService, chatService);

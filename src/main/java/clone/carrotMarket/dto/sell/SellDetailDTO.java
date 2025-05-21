@@ -50,7 +50,7 @@ public class SellDetailDTO {
         tradePlace = sell.getPlace();
         sellStatus = sell.getSellStatus();
         views = sell.getViews();
-        createdAt = sell.getCreated_at();
+        createdAt = sell.getCreatedAt();
         updatedAt = sell.getUpdatedAt();
         memberId = sell.getMember().getId();
         memberNickname = sell.getMember().getNickName();

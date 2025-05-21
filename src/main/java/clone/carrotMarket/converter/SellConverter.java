@@ -49,7 +49,7 @@ public class SellConverter {
                 .price(sell.getPrice())
                 .content(sell.getContent())
                 .place(sell.getPlace())
-                .createdAt(sell.getCreated_at())
+                .createdAt(sell.getCreatedAt())
                 .createdAt(sell.getUpdatedAt())
                 .views(sell.getViews())
                 .sellLikeCnt(sellLikeService.countSellLike(sell))

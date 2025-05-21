@@ -30,13 +30,13 @@ public class ChatService {
     private final MemberRepository memberRepository;
 
     public ChatRoom findByMemberAndSell(Member member, Sell sell) {
-        ChatRoom chat = chatRepository.findFirstByMemberAndSell(member, sell)
+        ChatRoom chat = chatRepository.findFirstBySenderAndSell(member, sell)
                 .orElse(null);
         return chat;
     }
 
     public Long countByMemberAndSell(Member member, Sell sell) {
-        return chatRepository.countByMemberAndSell(member, sell);
+        return chatRepository.countBySenderAndSell(member, sell);
     }
 
     //맴버에 따른 치팅 리스트 반환
