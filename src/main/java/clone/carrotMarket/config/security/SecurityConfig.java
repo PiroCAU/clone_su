@@ -4,6 +4,7 @@ import clone.carrotMarket.repository.MemberRepository;
 import clone.carrotMarket.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -24,10 +26,10 @@ public class SecurityConfig {
     private final TokenBlacklistService tokenBlacklistService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager manager) throws Exception {
         AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
         builder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-        AuthenticationManager manager = builder.build();
+//        AuthenticationManager manager = builder.build();
 
         return http
                 .csrf().disable()
@@ -41,6 +43,13 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+        return builder.build();
     }
 
     @Bean
