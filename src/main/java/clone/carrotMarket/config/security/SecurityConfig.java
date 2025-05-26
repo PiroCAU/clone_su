@@ -38,8 +38,14 @@ public class SecurityConfig {
                 .addFilter(new JwtAuthenticationFilter(manager, jwtUtil))       //인증 필터
                 .addFilter(new JwtAuthorizationFilter(manager, memberRepository, jwtUtil, tokenBlacklistService))      //인가 필터
                 .authorizeRequests()
-                .antMatchers("/api/login").permitAll()
-                .antMatchers("/api/signup").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/signup").permitAll()
+                .antMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/api-docs.html"
+                ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .build();

@@ -48,7 +48,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void editProfile(EditMemberDTO dto) {
+    public Member editProfile(EditMemberDTO dto) {
         Member member = memberRepository.findById(dto.getId()).orElseThrow(() -> new IllegalStateException("해당 유저가 존재하지 않습니다."));
 
         member.changeNickName(dto.getNickname());
@@ -60,7 +60,8 @@ public class MemberService {
             member.changeProfile_img(fileName);
         }
 
-        memberRepository.save(member);
+        Member newMember = memberRepository.save(member);
+        return newMember;
     }
 
     @Transactional

@@ -43,7 +43,7 @@ public class MemberController {
 
         memberService.signup(createMemberDTO);
 
-        return "redirect:/";
+        return "redirect:/signin";
     }
 
     @PostMapping("/logout")
@@ -86,7 +86,7 @@ public class MemberController {
     }
 
     @PatchMapping("/members/edit")
-    public String editMemder(@ModelAttribute("member") EditMemberDTO dto) {
+    public String editMember(@ModelAttribute("member") EditMemberDTO dto) {
         memberService.editProfile(dto);
         return "redirect:/members/myPage";
     }

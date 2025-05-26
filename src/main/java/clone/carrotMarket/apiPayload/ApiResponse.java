@@ -1,17 +1,22 @@
 package clone.carrotMarket.apiPayload;
 
 import clone.carrotMarket.config.exception.status.ErrorCode;
+import clone.carrotMarket.config.exception.status.SuccessStatus;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@JsonPropertyOrder({"isSuccess", "code", "message", "result"})
 public class ApiResponse<T> {
 
-    @Schema(description = "상태 코드", example = "200")
-    private HttpStatus status;
+    @Schema(description = "성공 실패 여부", example = "false")
+    private boolean isSuccess;
 
     @Schema(description = "에러 발생시 에러코드", example = "S500")
     private String code;
@@ -23,19 +28,14 @@ public class ApiResponse<T> {
     private T data;
 
     //성공 시 응답코드 반환
-    public static <T> ApiResponse<T> success(String message, T data) {
-        return ApiResponse.<T>builder()
-                .status(HttpStatus.OK)
-                .code(null)
-                .message(message)
-                .data(data)
-                .build();
+    public static <T> ApiResponse<T> success(T data) {
+        return new ApiResponse<>(true, SuccessStatus._OK.getCode() , SuccessStatus._OK.getMessage(), data);
     }
 
     //실패 시 응답코드 반환
     public static <T> ApiResponse<T> error(ErrorCode errorCode) {
         return ApiResponse.<T>builder()
-                .status(errorCode.getHttpStatus())
+                .isSuccess(false)
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .data(null)
@@ -45,7 +45,7 @@ public class ApiResponse<T> {
     // 에러 응답 생성 메서드(커스텀 메세지 추가)
     public static <T> ApiResponse<T> error(String message ,ErrorCode errorCode, T data) {
         return ApiResponse.<T>builder()
-                .status(errorCode.getHttpStatus())
+                .isSuccess(false)
                 .code(errorCode.getCode())
                 .message(message)
                 .data(data)
