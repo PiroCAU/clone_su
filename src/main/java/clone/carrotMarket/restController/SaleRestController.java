@@ -12,6 +12,7 @@ import clone.carrotMarket.dto.sell.*;
 import clone.carrotMarket.service.FileStorageService;
 import clone.carrotMarket.service.SellService;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+@Tag(name = "Sale", description = "판매글 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/sells")

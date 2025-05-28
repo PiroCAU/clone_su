@@ -5,6 +5,7 @@ import clone.carrotMarket.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,6 +27,7 @@ public class SecurityConfig {
     private final TokenBlacklistService tokenBlacklistService;
 
     @Bean
+    @Order(1)
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager manager) throws Exception {
         AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
         builder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
@@ -38,16 +40,22 @@ public class SecurityConfig {
                 .addFilter(new JwtAuthenticationFilter(manager, jwtUtil))       //인증 필터
                 .addFilter(new JwtAuthorizationFilter(manager, memberRepository, jwtUtil, tokenBlacklistService))      //인가 필터
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/signup").permitAll()
+                .antMatchers("/login", "/signup", "/signin").permitAll()
                 .antMatchers(
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
-                        "/api-docs.html"
-                ).permitAll()
-                .anyRequest().authenticated()
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/webjars/**",
+                        "/api-docs.html",
+                        "/api/**",
+                        "/css/**", "/js/**", "/images/**" // ✅ 정적 자원 허용
+                ).permitAll().anyRequest().authenticated()
                 .and()
+                .formLogin().disable()
+                .httpBasic().disable()
                 .build();
     }
 

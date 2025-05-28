@@ -10,6 +10,7 @@ import clone.carrotMarket.dto.user.MypageResponseDTO;
 import clone.carrotMarket.service.MemberService;
 import clone.carrotMarket.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Controller
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
@@ -38,7 +40,8 @@ public class MemberController {
     @PostMapping("/signup")
     public String newMember(@Valid @ModelAttribute CreateMemberDTO createMemberDTO, BindingResult result) {
         if (result.hasErrors()) {
-            return "members/createMemberForm";
+            result.getAllErrors().forEach(error -> log.warn("Validation error: {}", error));
+            return "redirect:/signup";
         }
 
         memberService.signup(createMemberDTO);
@@ -55,7 +58,8 @@ public class MemberController {
 
 
     @GetMapping("/signin")
-    public String getLogin(Model model) {
+    public String login(Model model) {
+        log.info("access to login with getMapping");
         model.addAttribute("loginDTO", new LoginDTO());
         return "members/loginForm";
     }
@@ -65,7 +69,7 @@ public class MemberController {
         if (result.hasErrors()) {
             return "members/loginForm";
         }
-
+        log.info("login service: token");
         String token = memberService.login(loginDTO.getEmail(), loginDTO.getPassword());
 
         session.setAttribute("JWT", token);
