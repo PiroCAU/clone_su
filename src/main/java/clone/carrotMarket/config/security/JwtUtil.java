@@ -3,6 +3,7 @@ package clone.carrotMarket.config.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,8 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String KEY = "as9@d!8s97ah#kD12**93A!!88Zpp!";
+    @Value("${jwt.secret}")
+    private String KEY;
     private final long EXP_TIEM = 1000L * 60 * 60;
 
     public String createToken(String email) {

@@ -46,7 +46,7 @@ public class MemberController {
 
         memberService.signup(createMemberDTO);
 
-        return "redirect:/signin";
+        return "redirect:/login";
     }
 
     @PostMapping("/logout")
@@ -57,16 +57,25 @@ public class MemberController {
     }
 
 
-    @GetMapping("/signin")
+    @GetMapping("/login")
     public String login(Model model) {
         log.info("access to login with getMapping");
         model.addAttribute("loginDTO", new LoginDTO());
         return "members/loginForm";
     }
 
-    @PostMapping("/signin")
+    /**
+     * 실제로 호출되지 않는다.
+     * spring security가 중간에 가로채서 처리하기 때문에
+     * @param loginDTO
+     * @param result
+     * @param session
+     * @return
+     */
+    @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginDTO loginDTO, BindingResult result, HttpSession session) {
         if (result.hasErrors()) {
+            log.info("Signin: result error");
             return "members/loginForm";
         }
         log.info("login service: token");
@@ -74,7 +83,7 @@ public class MemberController {
 
         session.setAttribute("JWT", token);
 
-        return "redirect:/";
+        return "redirect:/sells/my";
     }
 
     @GetMapping("/members/mypage")
