@@ -4,6 +4,7 @@ import antlr.Token;
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.repository.MemberRepository;
 import clone.carrotMarket.service.TokenBlacklistService;
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.asm.MemberRemoval;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,11 +15,13 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 // 매 요청마다 인증 검사
+@Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final MemberRepository memberRepository;
@@ -35,13 +38,37 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String header = request.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer")) {
+
+        if (header == null) {
+            log.info("doFilter: token is not exist in Header");
+
+            //헤더에 값이 없다면 cookies에서 찾는다
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie c : cookies) {
+                    String name = c.getName();
+                    String value = c.getValue();
+                    if (name.equals("Authorization")) {
+                        header = value;
+                        log.info("toekn was found in cookies");
+
+                    }
+                }
+            }
+        }
+
+        //여전히 없다면 예외처리
+        if (header == null) {
             chain.doFilter(request, response);
             return;
         }
 
-        //앞에 붙은 Bearer 제가
-        String token = header.replace("Bearer ", "");
+        String token = header;
+        if (header.startsWith("Bearer")) {
+            //앞에 붙은 Bearer 제가
+            token = header.replace("Bearer ", "");
+            log.info(token);
+        }
 
         //블랙리스트에 있는 토큰인지 확인
         if (tokenBlacklistService.isBlacklisted(token)) {

@@ -13,6 +13,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -70,7 +71,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         //jwt 토큰을 헤더에 넣는다.
         response.setHeader("Authorization", "Bearer " + jwt);
 
+        //cookie 방식
+        Cookie accessToken = new Cookie("Authorization", jwt);
+        accessToken.setMaxAge(60 * 60); // 1시간 동안 유효
+        accessToken.setPath("/");
+        accessToken.setDomain("localhost");
+        accessToken.setSecure(false);
+
+        response.addCookie(accessToken);
+
+
         //리다이렉트 위치 지정
-        response.sendRedirect("/sells/my");
+        response.sendRedirect("/sells/add");
     }
+
+
 }
