@@ -42,6 +42,7 @@ logging.level:
 server:
   session:
     tracking-modes: cookie
+  port: 8081
 file:
   dir: /Users/mymac/Library/Mobile Documents/com~apple~CloudDocs/Univ/study/Carrot-Market-Cloning/uploads
 # Swagger springdoc-ui Configuration
