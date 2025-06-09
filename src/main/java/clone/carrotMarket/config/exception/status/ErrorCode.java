@@ -26,7 +26,8 @@ public enum ErrorCode implements BaseErrorCode {
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
 
     //page 관련 에러
-    PAGE_NUMBER_ERROR(HttpStatus.BAD_REQUEST, "PAGE4001", "잘못된 페이지 요청입니다.");
+    PAGE_NUMBER_ERROR(HttpStatus.BAD_REQUEST, "PAGE4001", "잘못된 페이지 요청입니다."),
+    NOT_FOUND_GOOGLE_ACCESS_TOKEN_RESPONSE(HttpStatus.NOT_FOUND, "Google4001" , "존재하지 않는 구글 토큰입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
