@@ -27,10 +27,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final JwtResponseHandler jwtResponseHandler;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, JwtResponseHandler jwtResponseHandler) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.jwtResponseHandler = jwtResponseHandler;
 
         this.setRequiresAuthenticationRequestMatcher(
                 new AntPathRequestMatcher("/login", "POST")
@@ -65,24 +67,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         PrincipalDetails principal = (PrincipalDetails) authResult.getPrincipal();
-        String jwt = jwtUtil.createToken(principal.getUsername());
+//        String jwt = jwtUtil.createToken(principal.getUsername());
         log.info("---------------successfulAuthentication---------------");
 
-        //jwt 토큰을 헤더에 넣는다.
-        response.setHeader("Authorization", "Bearer " + jwt);
-
-        //cookie 방식
-        Cookie accessToken = new Cookie("Authorization", jwt);
-        accessToken.setMaxAge(60 * 60); // 1시간 동안 유효
-        accessToken.setPath("/");
-        accessToken.setDomain("localhost");
-        accessToken.setSecure(false);
-
-        response.addCookie(accessToken);
-
-
-        //리다이렉트 위치 지정
-        response.sendRedirect("/sells/add");
+        jwtResponseHandler.handlerJwtWithCookie(response, principal.getUsername());
     }
 
 

@@ -30,6 +30,7 @@ public class SecurityConfig {
     private final MemberRepository memberRepository;
     private final TokenBlacklistService tokenBlacklistService;
     private final PrincipalDetailService principalDetailService;
+    private final JwtResponseHandler jwtResponseHandler;
 
     @Bean
     @Order(1)
@@ -58,7 +59,7 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JwtAuthenticationFilter(manager, jwtUtil))       // 인증 필터
+                .addFilter(new JwtAuthenticationFilter(manager, jwtUtil, jwtResponseHandler))       // 인증 필터
                 .addFilter(new JwtAuthorizationFilter(manager, memberRepository, jwtUtil, tokenBlacklistService)) // 인가 필터
                 .formLogin().disable()
                 .httpBasic().disable()

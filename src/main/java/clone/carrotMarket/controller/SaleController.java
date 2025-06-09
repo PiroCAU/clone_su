@@ -52,6 +52,7 @@ public class SaleController {
     @GetMapping("/add")
     public String createSellPage(Model model) {
         model.addAttribute("sell", new CreateSellDTO());
+        model.addAttribute("categories", Category.values());
         return "sells/addForm";
     }
 
