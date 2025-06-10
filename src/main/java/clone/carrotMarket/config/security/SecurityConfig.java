@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers(
-                        "/login", "/signup", "/signin",      // 로그인 관련
+                        "/login", "/signup", "/signin", "login/**",      // 로그인 관련
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
@@ -55,10 +55,18 @@ public class SecurityConfig {
                         "/webjars/**",
                         "/api-docs.html",
                         "/api/**",        // API 허용 목록
-                        "/css/**", "/js/**", "/images/**" // 정적 리소스
+                        "/css/**", "/js/**", "/images/**", // 정적 리소스
+                        "/oauth2/**"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
+                //구글 로그인 관련
+                .oauth2Login()
+                .loginPage("/login") // 타임리프에서 만든 커스텀 로그인 페이지 경로
+                .defaultSuccessUrl("/oauth/success", true) // 로그인 성공 시 이동할 경로
+                .failureUrl("/login")
+                .and()
+
                 .addFilter(new JwtAuthenticationFilter(manager, jwtUtil, jwtResponseHandler))       // 인증 필터
                 .addFilter(new JwtAuthorizationFilter(manager, memberRepository, jwtUtil, tokenBlacklistService)) // 인가 필터
                 .formLogin().disable()

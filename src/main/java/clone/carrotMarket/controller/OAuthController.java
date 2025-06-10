@@ -29,7 +29,8 @@ public class OAuthController {
     private final JwtResponseHandler jwtResponseHandler;
 
     @GetMapping("/login/oauth2/code/google")
-    public void googleCallBack(@RequestParam String code, HttpServletResponse response) throws IOException {
+    public String googleCallBack(@RequestParam String code, HttpServletResponse response) throws IOException {
+        log.info("trying google login :" + code);
 
         //구글에서 사용자의 프로필을 가져온다
         GoogleAccountProfileResponse profile = googleClient.getGoogleAccountProfile(code);
@@ -39,5 +40,13 @@ public class OAuthController {
 
         //Member에 대해 토큰을 발행한다.
         jwtResponseHandler.handlerJwtWithCookie(response, member.getEmail());
+
+        return "redirect:/sells/my";
+    }
+
+    @GetMapping("/oauth/success")
+    public String oauthSuccess() {
+        log.info("OauthSuccess: ");
+        return "redirect:/sells/my";
     }
 }

@@ -4,6 +4,7 @@ import ch.qos.logback.core.status.ErrorStatus;
 import clone.carrotMarket.config.exception.handler.MemberHandler;
 import clone.carrotMarket.config.exception.status.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,19 +19,20 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GoogleClient {
 
-    @Value("${google.client-id}")
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
-    @Value("${google.client-secret}")
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String clientSecret;
-    @Value("${google.redirect-uri}")
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     private String redirectUri;
-    @Value("${google.authorization-grant-type}")
+    @Value("${spring.security.oauth2.client.registration.google.authorization-grant-type}")
     private String authorizationCode;
-    @Value("${google.url.access-token}")
+    @Value("${spring.security.oauth2.client.provider.google.token-uri}")
     private String accessTokenUrl;
-    @Value("${google.url.profile}")
+    @Value("${spring.security.oauth2.client.provider.google.user-info-uri}")
     private String profileUrl;
 
     //spring의 http 클라이언트.
@@ -44,6 +46,7 @@ public class GoogleClient {
 
     //구글 서버에 가서 사용자 정보를 바탕으로 토큰을 받는다.
     private String requestGoogleAccessToken(final String code) {
+        log.info("requestGoogleAccessToken");
         final String decodedCode = URLDecoder.decode(code, StandardCharsets.UTF_8);
         final HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
@@ -63,6 +66,7 @@ public class GoogleClient {
 
     //구글이 준 토큰을 가지고 구글에 저장된 사용자의 데이터를 가져온다. (이 데이터를 바탕으로 저장하거나(회원가입) 기존 회원 찾거나(로그인))
     private GoogleAccountProfileResponse requestGoogleAccountProfile(final String accessToken) {
+        log.info("requestGoogleAccountProfile: " + accessToken);
         final HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         final HttpEntity<GoogleAccessTokenRequest> httpEntity = new HttpEntity<>(headers);
