@@ -22,7 +22,7 @@ public class Member {
 
     private String email;
     private int manner;
-    private int longitude;
+
     private String place;
     private String name;
     private String nickName;

@@ -7,6 +7,7 @@ import clone.carrotMarket.domain.OAuthAccount;
 import clone.carrotMarket.repository.MemberRepository;
 import clone.carrotMarket.repository.OAuthRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +22,16 @@ public class OAuthService {
     private final OAuthRepository oAuthRepository;
 
     @Transactional
-    public Member loginOrRegisterGoogle(GoogleAccountProfileResponse profile) {
-        OAuthAccount authAccount = oAuthRepository.findByEmailAndProvider(profile.getEmail(), AuthProvideerEnum.GOOGLE)
+    public Member loginOrRegisterGoogle(OAuth2User profile) {
+        OAuthAccount authAccount = oAuthRepository.findByEmailAndProvider(profile.getAttribute("email"), AuthProvideerEnum.GOOGLE)
                 .orElseGet(() -> {
                     Member member = Member.builder()
-                            .email(profile.getEmail())
-                            .nickName(profile.getName())
+                            .email(profile.getAttribute("email"))
+                            .nickName(profile.getAttribute("name"))
                             .build();
                     Member savedMember = memberRepository.save(member);
                     OAuthAccount oAuthAccount = OAuthAccount.builder()
-                            .email(profile.getEmail())
+                            .email(profile.getAttribute("email"))
                             .provider(AuthProvideerEnum.GOOGLE)
                             .build();
                     OAuthAccount savedAuth = oAuthRepository.save(oAuthAccount);

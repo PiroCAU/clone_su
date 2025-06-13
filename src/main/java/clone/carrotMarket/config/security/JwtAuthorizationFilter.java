@@ -57,8 +57,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             }
         }
 
+        log.info("doFilter: cookie: " + header);
         //여전히 없다면 예외처리
         if (header == null) {
+            log.info("doFilter: header is null");
             chain.doFilter(request, response);
             return;
         }

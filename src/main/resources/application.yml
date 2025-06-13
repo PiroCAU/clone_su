@@ -21,7 +21,7 @@ spring:
     port : 6379
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         show_sql: true
@@ -40,6 +40,7 @@ logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
 server:
+  port: 8080
   session:
     tracking-modes: cookie
 file:

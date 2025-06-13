@@ -32,7 +32,7 @@
          th:errors="*{password}">Incorrect password</p>
     </div>
     <button type="submit" class="btn btn-primary">로그인</button>
-    <a th:href="'https://accounts.google.com/o/oauth2/v2/auth?client_id=' + ${clientId} + '&redirect_uri=' + ${redirectUri} + '&response_type=code&scope=email%20profile'">
+    <a th:href="@{/oauth2/authorization/google}">
       <button type="button">Google로 로그인</button>
     </a>
   </form>
