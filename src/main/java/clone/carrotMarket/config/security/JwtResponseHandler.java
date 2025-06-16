@@ -30,6 +30,6 @@ public class JwtResponseHandler {
 
         response.addCookie(accessToken);
 
-        response.sendRedirect("/sells/my");
+//        response.sendRedirect("/sells/my");
     }
 }

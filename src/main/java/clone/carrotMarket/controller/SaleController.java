@@ -144,8 +144,9 @@ public class SaleController {
         return "redirect:/sells/my/" + dto.getSellId();
     }
 
-    @PatchMapping("/{sellId}/updateStstus")
-    public String updateSellStatus(@PathVariable Long sellId, @LoginMember Member member, @RequestParam SellStatus status, HttpServletRequest request) {
+    @PatchMapping("/{sellId}/updateStatus")
+    public String updateSellStatus(@PathVariable Long sellId, @LoginMember Member member,
+                                   @RequestParam SellStatus status, HttpServletRequest request) {
         sellService.updateSellStatus(sellId, member, status);
 
         //이 요청이 어디서 왔는지 확인하고 해당 위치로 보낸다.

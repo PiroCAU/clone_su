@@ -2,6 +2,7 @@ package clone.carrotMarket.config.security;
 
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.repository.MemberRepository;
+import clone.carrotMarket.service.MemberService;
 import clone.carrotMarket.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
