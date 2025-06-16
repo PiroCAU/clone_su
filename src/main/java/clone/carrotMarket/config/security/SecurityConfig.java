@@ -2,6 +2,7 @@ package clone.carrotMarket.config.security;
 
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.repository.MemberRepository;
+import clone.carrotMarket.service.MemberService;
 import clone.carrotMarket.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,48 +19,61 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class  SecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
     private final TokenBlacklistService tokenBlacklistService;
     private final PrincipalDetailService principalDetailService;
+    private final JwtResponseHandler jwtResponseHandler;
 
     @Bean
     @Order(1)
-    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager manager) throws Exception {
-//        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-//        builder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-////        AuthenticationManager manager = builder.build();
+    public SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .requestMatcher(new OrRequestMatcher(
+                        new AntPathRequestMatcher("/oauth2/**"),
+                        new AntPathRequestMatcher("/login/**"),
+                        new AntPathRequestMatcher("/oauth/success")
+                ))  // ✅ 구글 관련 경로만 포함
+                .csrf().disable()
+                .authorizeRequests()
+                .anyRequest().permitAll()
+                .and()
+                .oauth2Login()
+                .loginPage("/login")
+                .defaultSuccessUrl("/oauth/success", true)
+                .failureUrl("/login")
+                .and()
+                .build();
+    }
 
+    @Bean
+    @Order(2)
+    public SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http, AuthenticationManager manager) throws Exception {
         return http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers(
-                        "/login", "/signup", "/signin",      // 로그인 관련
+                        "/signin", "/signup",             // ✅ 일반 로그인 경로는 JWT 체인에 포함
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/swagger-resources/**",
-                        "/configuration/ui",
-                        "/configuration/security",
-                        "/webjars/**",
-                        "/api-docs.html",
-                        "/api/**",        // API 허용 목록
-                        "/css/**", "/js/**", "/images/**" // 정적 리소스
+                        "/css/**", "/js/**", "/images/**"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JwtAuthenticationFilter(manager, jwtUtil))       // 인증 필터
-                .addFilter(new JwtAuthorizationFilter(manager, memberRepository, jwtUtil, tokenBlacklistService)) // 인가 필터
+                .addFilter(new JwtAuthenticationFilter(manager, jwtUtil, jwtResponseHandler))
+                .addFilter(new JwtAuthorizationFilter(manager, memberRepository, jwtUtil, tokenBlacklistService))
                 .formLogin().disable()
                 .httpBasic().disable()
                 .build();

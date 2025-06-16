@@ -2,6 +2,7 @@ package clone.carrotMarket.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 
 @Entity
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class OAuthAccount {
@@ -23,4 +25,9 @@ public class OAuthAccount {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.getOauthAccounts().add(this);
+    }
 }

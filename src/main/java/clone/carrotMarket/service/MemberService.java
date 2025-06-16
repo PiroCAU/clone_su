@@ -2,6 +2,7 @@ package clone.carrotMarket.service;
 
 import clone.carrotMarket.config.security.JwtUtil;
 import clone.carrotMarket.config.security.PrincipalDetails;
+import clone.carrotMarket.config.security.google.GoogleAccountProfileResponse;
 import clone.carrotMarket.converter.MemberConverter;
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.dto.user.CreateMemberDTO;
@@ -73,5 +74,9 @@ public class MemberService {
             member.changeProfile_img(basic_file);
         }
 
+    }
+
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email).orElse(null);
     }
 }

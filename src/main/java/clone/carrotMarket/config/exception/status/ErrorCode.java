@@ -27,7 +27,7 @@ public enum ErrorCode implements BaseErrorCode {
 
     //page 관련 에러
     PAGE_NUMBER_ERROR(HttpStatus.BAD_REQUEST, "PAGE4001", "잘못된 페이지 요청입니다."),
-    NOT_FOUND_GOOGLE_ACCESS_TOKEN_RESPONSE(HttpStatus.BAD_REQUEST, "GOOGLE4001", "구글 인증 토큰이 존재하지 않습니다.");
+    NOT_FOUND_GOOGLE_ACCESS_TOKEN_RESPONSE(HttpStatus.NOT_FOUND, "Google4001" , "존재하지 않는 구글 토큰입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

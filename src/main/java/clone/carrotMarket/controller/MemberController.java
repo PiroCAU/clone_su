@@ -11,6 +11,7 @@ import clone.carrotMarket.service.MemberService;
 import clone.carrotMarket.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,12 @@ public class MemberController {
     private final MemberService memberService;
     private final JwtUtil jwtUtil;
     private final TokenBlacklistService tokenBlacklistService;
+
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String clientId;
+
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
+    private String redirectUri;
 
     @GetMapping("/signup")
     public String newMemberForm(Model model) {
@@ -61,16 +68,14 @@ public class MemberController {
     public String login(Model model) {
         log.info("access to login with getMapping");
         model.addAttribute("loginDTO", new LoginDTO());
+        model.addAttribute("clientId", clientId);
+        model.addAttribute("redirectUri", redirectUri);
         return "members/loginForm";
     }
 
     /**
      * 실제로 호출되지 않는다.
      * spring security가 중간에 가로채서 처리하기 때문에
-     * @param loginDTO
-     * @param result
-     * @param session
-     * @return
      */
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginDTO loginDTO, BindingResult result, HttpSession session) {

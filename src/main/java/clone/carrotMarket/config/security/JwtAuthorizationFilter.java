@@ -3,6 +3,7 @@ package clone.carrotMarket.config.security;
 import antlr.Token;
 import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.repository.MemberRepository;
+import clone.carrotMarket.service.MemberService;
 import clone.carrotMarket.service.TokenBlacklistService;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.asm.MemberRemoval;
@@ -57,8 +58,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             }
         }
 
+        log.info("doFilter: cookie: " + header);
         //여전히 없다면 예외처리
         if (header == null) {
+            log.info("doFilter: header is null");
             chain.doFilter(request, response);
             return;
         }
@@ -79,7 +82,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         if (jwtUtil.validateToken(token)) {
             String email = jwtUtil.extractEmail(token);
-            Member member = memberRepository.findByEmail(email).orElseThrow();
+            Member member = memberRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다."));
             PrincipalDetails userDetails = new PrincipalDetails(member);
 
             Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
