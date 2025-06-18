@@ -9,6 +9,7 @@ import clone.carrotMarket.dto.sell.*;
 import clone.carrotMarket.repository.MemberRepository;
 import clone.carrotMarket.repository.SellRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class SellService {
@@ -42,6 +44,9 @@ public class SellService {
 //        List<Sell> sells = sellRepository.findAllByPlace(place);
 //    }
 
+    //sell 게시물의 상세 페이지
+    //해당 게시물의 자세한 설명
+    //같은 게시물의 작성자의 다른 글 간단하게 보여주기
     public SellDetailResponseDto findDetail(Sell sell) {
 
         List<Sell> top5ByMember = sellRepository.findTop5ByMember(sell.getMember());
@@ -54,15 +59,22 @@ public class SellService {
         return sellDetailResponseDto;
     }
 
-    public List<MySellResponseDTO> findMySell(Member member, SellStatus status) {
-        List<Sell> sells = sellRepository.findAllByMemberAndSellStatusOrderByCreatedAtDesc(member, status);
+    public List<MySellResponseDTO> findMySellList(Member member, String status) {
+        SellStatus sellStatus;
+        if (status.equals("판매중")) {
+            sellStatus = SellStatus.SELLING;
+        } else {
+            sellStatus = SellStatus.FIN;
+        }
+        List<Sell> sells = sellRepository.findAllByMemberAndSellStatusOrderByCreatedAtDesc(member, sellStatus);
         List<MySellResponseDTO> dtos = SellConverter.sellToMySellResponseDTO(sells, member, chatService, sellLikeService);
 
         return dtos;
     }
 
     public List<SellDTO> findOtherUserSells(Long currendUserId, Member member, int page, int size) {
-        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "created_at"));
+        log.info("findOtherUserSell: currentUserId: " , currendUserId);
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         List<Sell> content = sellRepository.findByMemberIdNotAndSellStatusNot(currendUserId, SellStatus.FIN, request).getContent();
         List<SellDTO> sellDTOS = SellConverter.sellToSellDTO(content, member, sellLikeService, chatService);

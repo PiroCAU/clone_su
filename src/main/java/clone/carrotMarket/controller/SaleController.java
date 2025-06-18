@@ -9,6 +9,7 @@ import clone.carrotMarket.domain.SellStatus;
 import clone.carrotMarket.dto.sell.*;
 import clone.carrotMarket.service.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/sells")
 public class SaleController {
@@ -60,13 +62,14 @@ public class SaleController {
     @PostMapping("/add")
     public String createSellPost(@Valid @ModelAttribute CreateSellDTO dto, BindingResult result, @LoginMember Member member) {
         if (result.hasErrors()) {
+            log.info("createSellPost: createDTO has error");
             return "sells/addForm";
         }
 
         Sell sell = SellConverter.createSellDtoToSell(dto, storageService, member);
 
         Sell savedSell = sellService.save(sell);
-        return "redirect:/sells/detail/" + savedSell.getId();
+        return "redirect:/sells/my/" + savedSell.getId();
     }
 
     //게시글 detail 관련 처리
@@ -81,8 +84,10 @@ public class SaleController {
 
     //마이페이지: 내 판매글
     @GetMapping("/my")
-    public String findMySell(@LoginMember Member member, @RequestParam(defaultValue = "SELLING") SellStatus sellStatus, Model model) {
-        List<MySellResponseDTO> dtos = sellService.findMySell(member, sellStatus);
+    public String findMySell(@LoginMember Member member, @RequestParam(defaultValue = "판매중") String sellStatus, Model model) {
+
+        log.info("my sell by sellstatus");
+        List<MySellResponseDTO> dtos = sellService.findMySellList(member, sellStatus);
         model.addAttribute("sells", dtos);
 
         return "sells/mySells";

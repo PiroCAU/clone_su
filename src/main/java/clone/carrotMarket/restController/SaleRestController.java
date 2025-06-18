@@ -58,8 +58,8 @@ public class SaleRestController {
 
     @GetMapping("/my")
     public ApiResponse<List<MySellResponseDTO>> findMySell(@Parameter(hidden = true) @LoginMember Member member,
-                                                           @RequestParam(defaultValue = "SELLING") SellStatus sellStatus) {
-        List<MySellResponseDTO> dtos = sellService.findMySell(member, sellStatus);
+                                                           @RequestParam(defaultValue = "판매중") String sellStatus) {
+        List<MySellResponseDTO> dtos = sellService.findMySellList(member, sellStatus);
         return ApiResponse.success(dtos);
     }
 
