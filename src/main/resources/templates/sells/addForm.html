@@ -43,8 +43,8 @@
             <input type="text" id="tradePlace" th:field="*{place}" th:class="${#fields.hasErrors('place')}? 'form-control fieldError' : 'form-control'" placeholder="거래 희망 장소">
             <p class="field-error" th:if="${#fields.hasErrors('place')}"
                th:errors="*{place}">Incorrect place</p>
-            <input type="hidden" id="latitude" th:field="*{latitude}" th:value="0" class="form-control">
-            <input type="hidden" id="longitude" th:field="*{longitude}" th:value="0" class="form-control">
+<!--            <input type="hidden" id="latitude" th:field="*{latitude}" th:value="0" class="form-control">-->
+<!--            <input type="hidden" id="longitude" th:field="*{longitude}" th:value="0" class="form-control">-->
         </div>
         <div class="row">
             <div class="col">

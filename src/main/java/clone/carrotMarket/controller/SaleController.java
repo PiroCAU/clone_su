@@ -60,9 +60,12 @@ public class SaleController {
 
     //게시글 작성 관련 처리
     @PostMapping("/add")
-    public String createSellPost(@Valid @ModelAttribute CreateSellDTO dto, BindingResult result, @LoginMember Member member) {
+    public String createSellPost(@Valid @ModelAttribute CreateSellDTO dto, BindingResult result, @LoginMember Member member, Model model) {
+
         if (result.hasErrors()) {
             log.info("createSellPost: createDTO has error");
+            model.addAttribute("sell", dto); // ✅ 꼭 넣어줘야 함
+            model.addAttribute("categories", Category.values()); // ✅ 이것도 다시 넣어야 렌더링 가능
             return "sells/addForm";
         }
 

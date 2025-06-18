@@ -44,7 +44,10 @@ server:
   session:
     tracking-modes: cookie
 file:
-  dir: /Users/mymac/Library/Mobile Documents/com~apple~CloudDocs/Univ/study/Carrot-Market-Cloning/uploads
+  upload:
+    profile-dir: /Users/mymac/profile
+    sell-dir: /Users/mymac/sell
+
 # Swagger springdoc-ui Configuration
 springdoc:
   packages-to-scan:  clone.carrotMarket.api
