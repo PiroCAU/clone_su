@@ -33,7 +33,7 @@
         </td>
         <td th:onclick="|javascript:goToSellDetail('${sell.sellId}')|">
             <h3 th:text="${sell.title}">제목</h3>
-            <span th:if="${sell.sellStatus.toString()} == '예약중'">예약중</span>
+            <span th:if="${sell.sellStatus.toString()} == 'BOOKING'">예약중</span>
             <p th:text="${sell.memberPlace}">장소</p>
             <p th:text="|${sell.price}원|"> >가격</p>
         </td>

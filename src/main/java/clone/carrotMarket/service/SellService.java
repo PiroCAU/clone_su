@@ -28,6 +28,7 @@ public class SellService {
     private final ChatService chatService;
     private final MemberRepository memberRepository;
     private final FileStorageService storageService;
+    private final ProductImgService productImgService;
 
     @Transactional
     public Sell save(Sell sell) {
@@ -104,7 +105,11 @@ public class SellService {
 
     public SellDetailDTO findByIdDTO(Long sellId) {
         Sell sell = sellRepository.findById(sellId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
-        SellDetailDTO sellDetailDTO = new SellDetailDTO(sell);
+
+        List<ProductImage> productImageList = productImgService.findListBySellId(sellId);
+        List<ProductImageDTO> productImageDTOS = SellConverter.productImgToProductImgDTO(productImageList);
+
+        SellDetailDTO sellDetailDTO = new SellDetailDTO(sell, productImageDTOS);
         return sellDetailDTO;
     }
 
