@@ -7,6 +7,7 @@ import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.domain.SellStatus;
 import clone.carrotMarket.dto.sell.*;
+import clone.carrotMarket.repository.ProductImgRepository;
 import clone.carrotMarket.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class SaleController {
 
     private final SellService sellService;
     private final FileStorageService storageService;
+    private final ProductImgRepository productImgRepository;
 
 //    //TODO: 페이징 관련 정책 수정, 지역별 검색 관련 수정
 //    @GetMapping("/list")
@@ -69,9 +71,9 @@ public class SaleController {
             return "sells/addForm";
         }
 
-        Sell sell = SellConverter.createSellDtoToSell(dto, storageService, member);
+        Sell sell = SellConverter.createSellDtoToSell(dto, storageService, member, productImgRepository);
 
-        Sell savedSell = sellService.save(sell);
+        Sell savedSell = sellService.saveWithMember(sell, member);
         return "redirect:/sells/my/" + savedSell.getId();
     }
 

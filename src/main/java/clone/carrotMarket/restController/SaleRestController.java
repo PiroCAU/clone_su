@@ -9,6 +9,7 @@ import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.domain.SellStatus;
 import clone.carrotMarket.dto.sell.*;
+import clone.carrotMarket.repository.ProductImgRepository;
 import clone.carrotMarket.service.FileStorageService;
 import clone.carrotMarket.service.SellService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,6 +29,7 @@ public class SaleRestController {
 
     private final SellService sellService;
     private final FileStorageService storageService;
+    private final ProductImgRepository productImgRepository;
 
     @ModelAttribute("category")
     public List<Category> categories() {
@@ -44,7 +46,7 @@ public class SaleRestController {
     @PostMapping("/add")
     public ApiResponse<Long> createSellPost(@Valid @RequestBody CreateSellDTO dto,
                                             @Parameter(hidden = true) @LoginMember Member member) {
-        Sell sell = SellConverter.createSellDtoToSell(dto, storageService, member);
+        Sell sell = SellConverter.createSellDtoToSell(dto, storageService, member, productImgRepository);
         Sell savedSell = sellService.save(sell);
         return ApiResponse.success(savedSell.getId());
     }

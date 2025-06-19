@@ -4,17 +4,23 @@ import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.ProductImage;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.dto.sell.*;
+import clone.carrotMarket.repository.ProductImgRepository;
 import clone.carrotMarket.service.ChatService;
 import clone.carrotMarket.service.FileStorageService;
 import clone.carrotMarket.service.SellLikeService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
+@Slf4j
 public class SellConverter {
 
-    public static Sell createSellDtoToSell(CreateSellDTO dto, FileStorageService storageService, Member member) {
+    public static Sell createSellDtoToSell(CreateSellDTO dto, FileStorageService storageService, Member member, ProductImgRepository productImgRepository) {
 
         List<MultipartFile> files = dto.getImageFiles();
         List<ProductImage> productImages = new ArrayList<>();
@@ -28,6 +34,7 @@ public class SellConverter {
                     .imageUrl(str)
                     .build();
             productImages.add(builder);
+            productImgRepository.save(builder);
         }
 
         return Sell.builder()
@@ -65,8 +72,10 @@ public class SellConverter {
 
     public static List<ProductImageDTO> productImgToProductImgDTO(List<ProductImage> images) {
         ArrayList<ProductImageDTO> dtos = new ArrayList<>();
+        log.info("Sell's img cnt: ", images.size());
 
         for (ProductImage image : images) {
+            log.info("image url: ", image.getImageUrl());
             ProductImageDTO productImageDTO = new ProductImageDTO(image.getImageUrl(), image.getImageRank());
             dtos.add(productImageDTO);
         }

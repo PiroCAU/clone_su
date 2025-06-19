@@ -34,6 +34,13 @@ public class SellService {
         return sellRepository.save(sell);
     }
 
+    @Transactional
+    public Sell saveWithMember(Sell sell, Member member) {
+        Sell save = sellRepository.save(sell);
+//        member.getSells().add(save);
+        return save;
+    }
+
     public Sell findById(Long id) {
         return sellRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("판매글이 존재하지 않습니다."));

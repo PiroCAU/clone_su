@@ -45,9 +45,9 @@
         </td>
         <td class="filter">
             <form th:id="|statusForm${sell.sellId}|" th:action="@{/sells/{sellId}/updateStatus(sellId=${sell.sellId})}" method="post">
-                <button class="statusButton" th:if="${sell.sellStatus.toString()} != '판매중'" th:onclick="|javascript:updateStatus('판매중',${sell.sellId})|">판매중으로 변경</button>
-                <button class="statusButton" th:if="${sell.sellStatus.toString()} != '예약중'" th:onclick="|javascript:updateStatus('예약중',${sell.sellId})|">예약중으로 변경</button>
-                <button class="statusButton" th:if="${sell.sellStatus.toString()} != '판매완료'" th:onclick="|javascript:updateStatus('판매완료',${sell.sellId})|">거래완료로 변경</button>
+                <button class="statusButton" th:if="${sell.sellStatus.toString()} != 'SELLING'" th:onclick="|javascript:updateStatus('SELLING',${sell.sellId})|">판매중으로 변경</button>
+                <button class="statusButton" th:if="${sell.sellStatus.toString()} != 'BOOKING'" th:onclick="|javascript:updateStatus('BOOKING',${sell.sellId})|">예약중으로 변경</button>
+                <button class="statusButton" th:if="${sell.sellStatus.toString()} != 'FIN'" th:onclick="|javascript:updateStatus('FIN',${sell.sellId})|">거래완료로 변경</button>
             </form>
         </td>
     </tr>
