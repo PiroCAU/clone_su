@@ -81,7 +81,7 @@ public class SellService {
     }
 
     public List<SellDTO> findOtherUserSells(Long currendUserId, Member member, int page, int size) {
-        log.info("findOtherUserSell: currentUserId: " , currendUserId);
+        log.info("findOtherUserSell: currentUserId: {}", currendUserId);
         PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         List<Sell> content = sellRepository.findByMemberIdNotAndSellStatusNot(currendUserId, SellStatus.FIN, request).getContent();
