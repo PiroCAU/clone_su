@@ -72,10 +72,10 @@ public class SellConverter {
 
     public static List<ProductImageDTO> productImgToProductImgDTO(List<ProductImage> images) {
         ArrayList<ProductImageDTO> dtos = new ArrayList<>();
-        log.info("Sell's img cnt: ", images.size());
+        log.info("Sell's img cnt: {}", images.size());
 
         for (ProductImage image : images) {
-            log.info("image url: ", image.getImageUrl());
+            log.info("image url: {}", image.getImageUrl());
             ProductImageDTO productImageDTO = new ProductImageDTO(image.getImageUrl(), image.getImageRank());
             dtos.add(productImageDTO);
         }
