@@ -39,11 +39,11 @@ public class SellDetailDTO {
 
     private List<Long> roomIds;
 
-    public SellDetailDTO(Sell sell){
+    public SellDetailDTO(Sell sell, List<ProductImageDTO> imgdtos){
         sellId = sell.getId();
         title = sell.getTitle();
         content = sell.getContent();
-        productImages =  SellConverter.productImgToProductImgDTO(sell.getProductImage());
+        productImages =  imgdtos;
         sellLikeCnt = sell.getSellLikes().size();
         price = sell.getPrice();
         category = sell.getCategory();

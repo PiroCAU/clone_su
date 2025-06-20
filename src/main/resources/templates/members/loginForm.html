@@ -32,8 +32,11 @@
          th:errors="*{password}">Incorrect password</p>
     </div>
     <button type="submit" class="btn btn-primary">로그인</button>
+    <a th:href="@{/signup}">
+      <button type="button" class="btn btn-secondary">회원가입</button>
+    </a>
     <a th:href="@{/oauth2/authorization/google}">
-      <button type="button">Google로 로그인</button>
+      <button type="button" class="btn btn-light">Google로 로그인</button>
     </a>
   </form>
   <br/>

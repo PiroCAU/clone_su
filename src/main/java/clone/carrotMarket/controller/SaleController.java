@@ -7,8 +7,10 @@ import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.domain.SellStatus;
 import clone.carrotMarket.dto.sell.*;
+import clone.carrotMarket.repository.ProductImgRepository;
 import clone.carrotMarket.service.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,12 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/sells")
 public class SaleController {
 
     private final SellService sellService;
     private final FileStorageService storageService;
+    private final ProductImgRepository productImgRepository;
 
 //    //TODO: 페이징 관련 정책 수정, 지역별 검색 관련 수정
 //    @GetMapping("/list")
@@ -58,15 +62,19 @@ public class SaleController {
 
     //게시글 작성 관련 처리
     @PostMapping("/add")
-    public String createSellPost(@Valid @ModelAttribute CreateSellDTO dto, BindingResult result, @LoginMember Member member) {
+    public String createSellPost(@Valid @ModelAttribute CreateSellDTO dto, BindingResult result, @LoginMember Member member, Model model) {
+
         if (result.hasErrors()) {
+            log.info("createSellPost: createDTO has error");
+            model.addAttribute("sell", dto); // ✅ 꼭 넣어줘야 함
+            model.addAttribute("categories", Category.values()); // ✅ 이것도 다시 넣어야 렌더링 가능
             return "sells/addForm";
         }
 
-        Sell sell = SellConverter.createSellDtoToSell(dto, storageService, member);
+        Sell sell = SellConverter.createSellDtoToSell(dto, storageService, member, productImgRepository);
 
-        Sell savedSell = sellService.save(sell);
-        return "redirect:/sells/detail/" + savedSell.getId();
+        Sell savedSell = sellService.saveWithMember(sell, member);
+        return "redirect:/sells/my/" + savedSell.getId();
     }
 
     //게시글 detail 관련 처리
@@ -81,8 +89,10 @@ public class SaleController {
 
     //마이페이지: 내 판매글
     @GetMapping("/my")
-    public String findMySell(@LoginMember Member member, @RequestParam(defaultValue = "SELLING") SellStatus sellStatus, Model model) {
-        List<MySellResponseDTO> dtos = sellService.findMySell(member, sellStatus);
+    public String findMySell(@LoginMember Member member, @RequestParam(defaultValue = "판매중") String sellStatus, Model model) {
+
+        log.info("my sell by sellstatus");
+        List<MySellResponseDTO> dtos = sellService.findMySellList(member, sellStatus);
         model.addAttribute("sells", dtos);
 
         return "sells/mySells";
@@ -147,6 +157,7 @@ public class SaleController {
     @PatchMapping("/{sellId}/updateStatus")
     public String updateSellStatus(@PathVariable Long sellId, @LoginMember Member member,
                                    @RequestParam SellStatus status, HttpServletRequest request) {
+        log.info("POST updateStatus");
         sellService.updateSellStatus(sellId, member, status);
 
         //이 요청이 어디서 왔는지 확인하고 해당 위치로 보낸다.
@@ -156,7 +167,7 @@ public class SaleController {
         if (str.startsWith("my")) {
             return "redirect:/sells/my";
         }
-        return "redirect:/";
+        return "redirect:/sells/my/"+sellId;
     }
 
     @DeleteMapping("{sellId}")

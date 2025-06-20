@@ -9,6 +9,7 @@ import clone.carrotMarket.dto.sell.*;
 import clone.carrotMarket.repository.MemberRepository;
 import clone.carrotMarket.repository.SellRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class SellService {
@@ -26,10 +28,18 @@ public class SellService {
     private final ChatService chatService;
     private final MemberRepository memberRepository;
     private final FileStorageService storageService;
+    private final ProductImgService productImgService;
 
     @Transactional
     public Sell save(Sell sell) {
         return sellRepository.save(sell);
+    }
+
+    @Transactional
+    public Sell saveWithMember(Sell sell, Member member) {
+        Sell save = sellRepository.save(sell);
+//        member.getSells().add(save);
+        return save;
     }
 
     public Sell findById(Long id) {
@@ -42,6 +52,9 @@ public class SellService {
 //        List<Sell> sells = sellRepository.findAllByPlace(place);
 //    }
 
+    //sell 게시물의 상세 페이지
+    //해당 게시물의 자세한 설명
+    //같은 게시물의 작성자의 다른 글 간단하게 보여주기
     public SellDetailResponseDto findDetail(Sell sell) {
 
         List<Sell> top5ByMember = sellRepository.findTop5ByMember(sell.getMember());
@@ -54,15 +67,22 @@ public class SellService {
         return sellDetailResponseDto;
     }
 
-    public List<MySellResponseDTO> findMySell(Member member, SellStatus status) {
-        List<Sell> sells = sellRepository.findAllByMemberAndSellStatusOrderByCreatedAtDesc(member, status);
+    public List<MySellResponseDTO> findMySellList(Member member, String status) {
+        SellStatus sellStatus;
+        if (status.equals("SELLING")) {
+            sellStatus = SellStatus.SELLING;
+        } else {
+            sellStatus = SellStatus.FIN;
+        }
+        List<Sell> sells = sellRepository.findAllByMemberAndSellStatusOrderByCreatedAtDesc(member, sellStatus);
         List<MySellResponseDTO> dtos = SellConverter.sellToMySellResponseDTO(sells, member, chatService, sellLikeService);
 
         return dtos;
     }
 
     public List<SellDTO> findOtherUserSells(Long currendUserId, Member member, int page, int size) {
-        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "created_at"));
+        log.info("findOtherUserSell: currentUserId: {}", currendUserId);
+        PageRequest request = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         List<Sell> content = sellRepository.findByMemberIdNotAndSellStatusNot(currendUserId, SellStatus.FIN, request).getContent();
         List<SellDTO> sellDTOS = SellConverter.sellToSellDTO(content, member, sellLikeService, chatService);
@@ -85,7 +105,11 @@ public class SellService {
 
     public SellDetailDTO findByIdDTO(Long sellId) {
         Sell sell = sellRepository.findById(sellId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
-        SellDetailDTO sellDetailDTO = new SellDetailDTO(sell);
+
+        List<ProductImage> productImageList = productImgService.findListBySellId(sellId);
+        List<ProductImageDTO> productImageDTOS = SellConverter.productImgToProductImgDTO(productImageList);
+
+        SellDetailDTO sellDetailDTO = new SellDetailDTO(sell, productImageDTOS);
         return sellDetailDTO;
     }
 
@@ -146,7 +170,7 @@ public class SellService {
 
     //게시글 수정 명령이 들어오면 수정한 사람과 작성자를 비교해서 수정 가능한 지 확인한다.
     public boolean isEditableMember(Sell sell, Member member) {
-        if (sell.getMember() == member) {
+        if (sell.getMember().getId().equals(member.getId())) {
             return true;
         } else {
             return false;
