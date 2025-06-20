@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.jwtResponseHandler = jwtResponseHandler;
 
         this.setRequiresAuthenticationRequestMatcher(
-                new AntPathRequestMatcher("/login", "POST")
+                new AntPathRequestMatcher("/signin", "POST")
         );
 
         this.setAuthenticationManager(authenticationManager);
@@ -75,6 +75,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("---------------successfulAuthentication---------------");
 
         jwtResponseHandler.handlerJwtWithCookie(response, principal.getUsername());
+        response.sendRedirect("/sells/my");
     }
 
 
