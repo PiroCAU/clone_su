@@ -37,6 +37,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.setRequiresAuthenticationRequestMatcher(
                 new AntPathRequestMatcher("/login", "POST")
         );
+
+        this.setAuthenticationManager(authenticationManager);
     }
 
     /**
@@ -51,9 +53,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //            LoginDTO loginDTO = om.readValue(request.getInputStream(), LoginDTO.class);
 
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
-
-            return authenticationManager.authenticate(token);
+            Authentication auth = authenticationManager.authenticate(token);
+            log.info("AttempAuthentication success: -------------");
+            return auth;
         } catch (Exception e) {
+            log.info("AttempAuthentication error: ------------");
             throw new RuntimeException(e);
         }
     }
@@ -67,7 +71,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         PrincipalDetails principal = (PrincipalDetails) authResult.getPrincipal();
-//        String jwt = jwtUtil.createToken(principal.getUsername());
+        String jwt = jwtUtil.createToken(principal.getUsername());
         log.info("---------------successfulAuthentication---------------");
 
         jwtResponseHandler.handlerJwtWithCookie(response, principal.getUsername());
