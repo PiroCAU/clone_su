@@ -69,7 +69,7 @@ public class SellService {
 
     public List<MySellResponseDTO> findMySellList(Member member, String status) {
         SellStatus sellStatus;
-        if (status.equals("판매중")) {
+        if (status.equals("SELLING")) {
             sellStatus = SellStatus.SELLING;
         } else {
             sellStatus = SellStatus.FIN;
