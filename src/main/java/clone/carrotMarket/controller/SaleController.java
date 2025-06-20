@@ -157,6 +157,7 @@ public class SaleController {
     @PatchMapping("/{sellId}/updateStatus")
     public String updateSellStatus(@PathVariable Long sellId, @LoginMember Member member,
                                    @RequestParam SellStatus status, HttpServletRequest request) {
+        log.info("POST updateStatus");
         sellService.updateSellStatus(sellId, member, status);
 
         //이 요청이 어디서 왔는지 확인하고 해당 위치로 보낸다.
@@ -166,7 +167,7 @@ public class SaleController {
         if (str.startsWith("my")) {
             return "redirect:/sells/my";
         }
-        return "redirect:/";
+        return "redirect:/sells/my/"+sellId;
     }
 
     @DeleteMapping("{sellId}")

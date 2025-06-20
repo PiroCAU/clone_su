@@ -170,7 +170,7 @@ public class SellService {
 
     //게시글 수정 명령이 들어오면 수정한 사람과 작성자를 비교해서 수정 가능한 지 확인한다.
     public boolean isEditableMember(Sell sell, Member member) {
-        if (sell.getMember() == member) {
+        if (sell.getMember().getId().equals(member.getId())) {
             return true;
         } else {
             return false;
