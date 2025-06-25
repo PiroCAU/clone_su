@@ -56,6 +56,7 @@ public class ChatRoomController {
     @GetMapping("/room/{roomId}")
     public String interChatRoom(@PathVariable Long roomId, @LoginMember Member member, Model model) {
         ChatRoomDTO chatRoomDTO = chatService.accessById(roomId, member);
+        chatService.getHistory(roomId);
         model.addAttribute("room", chatRoomDTO);
         model.addAttribute("loginMember", member);
         return "chat/room";

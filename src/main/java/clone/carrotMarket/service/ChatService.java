@@ -101,4 +101,9 @@ public class ChatService {
         }
     }
 
+    public List<ChatMessageDTO> getHistory(Long roomId) {
+        List<ChatMessage> chatMessages = chatMessageRepository.findByRoomIdOrderBySentAtAsc(roomId);
+        List<ChatMessageDTO> DTOList = chatMessages.stream().map(ChatConverter::chatMessageToDTO).collect(Collectors.toList());
+        return DTOList;
+    }
 }
