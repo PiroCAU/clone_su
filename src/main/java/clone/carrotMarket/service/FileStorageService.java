@@ -1,6 +1,7 @@
 package clone.carrotMarket.service;
 
 import clone.carrotMarket.domain.ProductImage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,9 +14,11 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
 
-    private final String uploadProfileDir = "/resources/static/image/profile";
-    private final String uploadSellDir = "/resources/static/image/sell";
-    private final String basicProfile = "resources/static/image/basicProfile.png";
+    @Value("${file.upload.profile-dir}")
+    private String uploadProfileDir;
+    @Value("${file.upload.sell-dir}")
+    private String uploadSellDir;
+    private final String basicProfile = "/resources/static/image/basicProfile.png";
 
     public String storeProfileImg(MultipartFile file) {
         try {

@@ -69,7 +69,8 @@ public class Sell {
         }
         this.sellLikes = null;
 
-        this.setMember(member);
+        this.member = member;
+
     }
 
     public void changeTitle(String title) {

@@ -73,23 +73,23 @@ public class MemberController {
         return "members/loginForm";
     }
 
-    /**
-     * 실제로 호출되지 않는다.
-     * spring security가 중간에 가로채서 처리하기 때문에
-     */
-    @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginDTO loginDTO, BindingResult result, HttpSession session) {
-        if (result.hasErrors()) {
-            log.info("Signin: result error");
-            return "members/loginForm";
-        }
-        log.info("login service: token");
-        String token = memberService.login(loginDTO.getEmail(), loginDTO.getPassword());
-
-        session.setAttribute("JWT", token);
-
-        return "redirect:/sells/my";
-    }
+//    /**
+//     * 실제로 호출되지 않는다.
+//     * spring security가 중간에 가로채서 처리하기 때문에
+//     */
+//    @PostMapping("/login")
+//    public String login(@Valid @ModelAttribute LoginDTO loginDTO, BindingResult result, HttpSession session) {
+//        if (result.hasErrors()) {
+//            log.info("Signin: result error");
+//            return "members/loginForm";
+//        }
+//        log.info("login service: token");
+//        String token = memberService.login(loginDTO.getEmail(), loginDTO.getPassword());
+//
+//        session.setAttribute("JWT", token);
+//
+//        return "redirect:/sells/my";
+//    }
 
     @GetMapping("/members/mypage")
     public String myInfo(Model model, @LoginMember Member member) {

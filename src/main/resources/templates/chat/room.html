@@ -44,7 +44,7 @@
                 <img th:if="${chatMessage.senderId == room.senderId and room.senderImage != null}" th:src="${room.senderImage}" alt="유저 이미지" width="20px" height="20px">
                 <img th:if="${chatMessage.senderId == room.sellerId and room.sellerImage == null}" th:src="|/image/basicProfile.png|" alt="유저 이미지" width="20px" height="20px">
                 <img th:if="${chatMessage.senderId == room.senderId and room.senderImage == null}" th:src="|/image/basicProfile.png|" alt="유저 이미지" width="20px" height="20px">
-                <div class='alert' th:classappend="${chatMessage.senderId == loginMember.id} ? alert-warning : alert-secondary">
+                <div class='alert' th:classappend="${chatMessage.senderId == loginMember.id} ? 'alert-warning' : 'alert-secondary'">
                     <b th:text="${chatMessage.message}">채팅 영역</b>
                 </div>
             </div>
@@ -69,7 +69,7 @@
 
 
                 var roomId = [[${room.id}]];
-                var username = [[${loginMember.nickname}]];
+                var username = [[${loginMember.nickName}]];
                 var senderId =  [[${loginMember.id}]];
                 var seller = [[${room.sellerNickname}]];
                 var sender = [[${room.senderNickname}]];

@@ -32,9 +32,9 @@ public class CreateSellDTO {
     @NotBlank(message = "희망 거래 위치를 작성해 주세요")
     private String place;
 
-    @NotNull
+
     private Double latitude;
 
-    @NotNull
+
     private Double longitude;
 }

@@ -12,7 +12,7 @@
 <body>
 <div class="container">
   <h2>로그인</h2>
-  <form role="form" action="/login" th:object="${loginDTO}" method="post">
+  <form role="form" action="/signin" th:object="${loginDTO}" method="post">
     <div th:if="${#fields.hasGlobalErrors()}">
       <p class="field-error" th:each="err : ${#fields.globalErrors()}"
          th:text="${err}">전체 오류 메시지</p>
@@ -32,8 +32,11 @@
          th:errors="*{password}">Incorrect password</p>
     </div>
     <button type="submit" class="btn btn-primary">로그인</button>
+    <a th:href="@{/signup}">
+      <button type="button" class="btn btn-secondary">회원가입</button>
+    </a>
     <a th:href="@{/oauth2/authorization/google}">
-      <button type="button">Google로 로그인</button>
+      <button type="button" class="btn btn-light">Google로 로그인</button>
     </a>
   </form>
   <br/>
