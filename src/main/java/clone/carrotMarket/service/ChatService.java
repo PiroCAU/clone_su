@@ -12,6 +12,7 @@ import clone.carrotMarket.repository.ChatRepository;
 import clone.carrotMarket.repository.MemberRepository;
 import clone.carrotMarket.repository.SellRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -54,6 +56,7 @@ public class ChatService {
 
     @Transactional
     public ChatRoom createChatRoom(Long sellId, Member member) {
+        log.info("crreateChatRoom: ", sellId);
         Sell sell = sellRepository.findById(sellId).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
 
         Optional<ChatRoom> existedRoom = chatRepository.findBySellAndSender(sell, member);
@@ -62,10 +65,12 @@ public class ChatService {
             return existedRoom.get();
         }
         ChatRoom chatRoom = new ChatRoom(sell, member);
+        chatRepository.save(chatRoom);
         return chatRoom;
     }
 
     public ChatRoomDTO accessById(Long roomId, Member member) {
+        log.info("Access chatRoom by Id: ", roomId);
         ChatRoom room = chatRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채팅방이니다."));
 
         Member sender = room.getSender();

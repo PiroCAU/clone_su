@@ -68,7 +68,8 @@ public class  SecurityConfig {
                         "/signin", "/signup",             // ✅ 일반 로그인 경로는 JWT 체인에 포함
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/css/**", "/js/**", "/images/**"
+                        "/css/**", "/js/**", "/images/**",
+                        "/api/**"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
