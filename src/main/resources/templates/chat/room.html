@@ -30,7 +30,7 @@
             <img th:if="${room.productImage == null}" th:src="|/image/noImage.jpg|" width="100" height="100" />
         </div>
         <div class="sell-info">
-            <strong th:if="${room.sellStatus.toString()} == 'SELLING'">예약중</strong>
+            <strong th:if="${room.sellStatus.toString()} == 'SELLING'">구매가능</strong>
             <strong th:if="${room.sellStatus.toString()} == 'BOOKING'">예약중</strong>
             <strong th:if="${room.sellStatus.toString()} == 'FIN'">거래완료</strong>
             <span th:text="${room.sellTitle}">판매 글 제목</span>
