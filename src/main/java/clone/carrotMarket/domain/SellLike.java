@@ -3,6 +3,7 @@ package clone.carrotMarket.domain;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,6 +22,8 @@ public class SellLike {
     @JoinColumn(name = "sell_id")
     private Sell sell;
 
+    private LocalDateTime createdAt;
+
     public SellLike(Member member, Sell sell) {
         this.member = member;
         if (!member.getSellLikes().contains(this)) {
@@ -31,6 +34,8 @@ public class SellLike {
         if (!sell.getSellLikes().contains(this)) {
             sell.getSellLikes().add(this);
         }
+
+        this.createdAt = LocalDateTime.now();
     }
 
     public void delete() {

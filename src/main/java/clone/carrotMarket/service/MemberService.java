@@ -79,4 +79,8 @@ public class MemberService {
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email).orElse(null);
     }
+
+    public Member findById(Long id) {
+        return memberRepository.findById(id).orElse(null);
+    }
 }

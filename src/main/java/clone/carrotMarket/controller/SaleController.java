@@ -30,6 +30,7 @@ public class SaleController {
     private final SellService sellService;
     private final FileStorageService storageService;
     private final ProductImgRepository productImgRepository;
+    private final SellLikeService sellLikeService;
 
 //    //TODO: 페이징 관련 정책 수정, 지역별 검색 관련 수정
 //    @GetMapping("/list")
@@ -66,8 +67,8 @@ public class SaleController {
 
         if (result.hasErrors()) {
             log.info("createSellPost: createDTO has error");
-            model.addAttribute("sell", dto); // ✅ 꼭 넣어줘야 함
-            model.addAttribute("categories", Category.values()); // ✅ 이것도 다시 넣어야 렌더링 가능
+            model.addAttribute("sell", dto);
+            model.addAttribute("categories", Category.values());
             return "sells/addForm";
         }
 
@@ -174,5 +175,11 @@ public class SaleController {
     public String deleteSell(@PathVariable Long sellId, @LoginMember Member member) {
         sellService.deleteSell(sellId, member);
         return "redirect:/sells/my";
+    }
+
+    @GetMapping("/sells/{memberId}")
+    public String findLikeSellsByMemberId(@PathVariable Long memberId,
+                                          @RequestParam(defaultValue = "SELLING") SellStatus sellStatus, Model model) {
+        sellLikeService.getSellDTOByLikesANDStatus(memberId, sellStatus);
     }
 }
