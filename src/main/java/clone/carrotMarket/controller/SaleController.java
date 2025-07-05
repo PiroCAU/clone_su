@@ -180,6 +180,8 @@ public class SaleController {
     @GetMapping("/sells/{memberId}")
     public String findLikeSellsByMemberId(@PathVariable Long memberId,
                                           @RequestParam(defaultValue = "SELLING") SellStatus sellStatus, Model model) {
-        sellLikeService.getSellDTOByLikesANDStatus(memberId, sellStatus);
+        List<SellDTO> sellDTOs = sellLikeService.getSellDTOByLikesANDStatus(memberId, sellStatus);
+        model.addAttribute("sells", sellDTOs);
+        return "sells/likeSells";
     }
 }

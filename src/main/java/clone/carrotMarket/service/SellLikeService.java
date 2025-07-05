@@ -5,6 +5,7 @@ import clone.carrotMarket.domain.Member;
 import clone.carrotMarket.domain.Sell;
 import clone.carrotMarket.domain.SellLike;
 import clone.carrotMarket.domain.SellStatus;
+import clone.carrotMarket.dto.sell.SellDTO;
 import clone.carrotMarket.repository.SellLikeRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -69,10 +70,11 @@ public class SellLikeService {
         }
     }
 
-    public List<Sell> getSellDTOByLikesANDStatus(Long memberId, SellStatus sellStatus) {
+    public List<SellDTO> getSellDTOByLikesANDStatus(Long memberId, SellStatus sellStatus) {
         List<Sell> sells = getLikedSellsByStatus(memberId, sellStatus);
         Member member = memberService.findById(memberId);
-        SellConverter.sellToSellDTO(sells, member, this, chatService);
+        List<SellDTO> sellDTOS = SellConverter.sellToSellDTO(sells, member, this, chatService);
+        return sellDTOS;
     }
 
     private List<Sell> getLikedSellsByStatus(Long memberId, SellStatus sellStatus) {
