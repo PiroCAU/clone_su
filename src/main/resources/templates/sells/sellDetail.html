@@ -182,7 +182,9 @@
     <div class="otherSells">
         <div class="seller-info">
             <span th:text="|${sell.memberNickname}님의 판매 상품|" class="seller-nickname">판매자 닉네임</span>
-            <a th:href="@{/sells/other/{sellId}?(sellId=${sell.sellId},memberId=${param.sellerId})}" class="view-all-link">모두 보기</a>
+            <a th:href="@{/sells/other/{sellId}(sellId=${sell.sellId})}"
+               th:hrefappend="|?memberId=${param.sellerId}|"
+               class="view-all-link">모두 보기</a>
         </div>
 
         <ul class="product-list">
